@@ -10,6 +10,8 @@ include ../data/sys.mk
 SDKDIR =
 
 CFILES = $(shell find . -name "*.c")
+CFILES += $(shell find ../rtl/ -name "*.c")
+
 OBJECTS = $(CFILES:.c=.o)
 DEPS = $(CFILES:.c=.d)
 
