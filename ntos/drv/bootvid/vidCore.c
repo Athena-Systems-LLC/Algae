@@ -7,7 +7,63 @@
 
 #include <ke/types.h>
 #include <ke/bootParam.h>
+#include <ke/defs.h>
 #include <drv/bootVid.h>
+
+extern UCHAR g_consFont[];
+
+/*
+ * Get the index into the framebuffer with an x and y
+ * position.
+ *
+ * @pitch: Framebuffer pitch
+ * @x: X position to plot
+ * @y: Y position to plot
+ *
+ * Returns index
+ */
+ALWAYS_INLINE static inline USIZE
+fbGetIdx(ULONG pitch, ULONG x, ULONG y)
+{
+    return x + y * (pitch / 4);
+}
+
+int
+bootVidDrawCh(BOOTVID_CHAR *chp)
+{
+    struct bootParams params;
+    struct fbParams *fbParams;
+    const UCHAR *glyph;
+    PSF_FONT *font = (PSF_FONT *)g_consFont;
+    ULONG x, y, color;
+    ULONG idx, *fbio;
+    int error;
+
+    if (chp == NULL) {
+        return -1;
+    }
+
+    error = keGetBootParams(&params, 0);
+    if (error < 0) {
+        return error;
+    }
+
+    fbParams = &params.fbParams;
+    fbio = (ULONG *)fbParams->io;
+    glyph = PTR_OFFSET(font, FONT_HDRLEN + chp->ch * font->chSize);
+    x = chp->x;
+    y = chp->y;
+
+    for (USIZE cy = 0; cy < font->chSize; ++cy) {
+        for (USIZE cx = 0; cx < 8; ++cx){
+            color = ISSET(glyph[cy], BIT(8 - cx)) ? chp->fg : chp->bg;
+            idx = fbGetIdx(fbParams->pitch, x+cx, y+cy);
+            fbio[idx] = color;
+        }
+    }
+
+    return 0;
+}
 
 void
 bootVidClear(ULONG rgb)
