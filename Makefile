@@ -6,9 +6,15 @@
 #
 
 ARCH = amd64
+ISO_DEST = algae.iso
+QEMU_FLAGS = -cdrom $(ISO_DEST) --enable-kvm
 
 .PHONY: all
-all: ntos
+all: ntos iso
+
+.PHONY: iso
+iso:
+	grub-mkrescue -o $(ISO_DEST) ntos/data/
 
 .PHONY: ntos
 ntos:
@@ -17,3 +23,7 @@ ntos:
 .PHONY: clean
 clean:
 	cd ntos; make clean ARCH=$(ARCH)
+
+.PHONY: run
+run:
+	qemu-system-x86_64 $(QEMU_FLAGS)
