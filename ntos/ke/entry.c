@@ -5,11 +5,12 @@
  * Provided under the BSD 3-Clause license.
  */
 
-#include <hal/cpu.h>
+#include <ke/boot.h>
 
 void
 kMain(void)
 {
-    halCpuInit();
+    kiPlatformInit();
+    kiProcessorInit();
     for (;;);
 }
