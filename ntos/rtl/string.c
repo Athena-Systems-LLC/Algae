@@ -8,6 +8,8 @@
 #include <rtl/string.h>
 #include <ke/types.h>
 
+#define IS_DIGIT(C) ((C >= '0' && C <= '9'))
+
 USIZE
 rtlStrlen(CHAR *str)
 {
@@ -19,4 +21,24 @@ rtlStrlen(CHAR *str)
 
     while (str[i++] != '\0');
     return i - 1;
+}
+
+LONG
+rtlToInt32(char *s)
+{
+    LONG n, sign;
+
+    while (*s == ' ') {
+        ++s;
+    }
+
+    sign = (*s == '-') ? -1 : 1;
+    if (*s == '+' || *s == '-') {
+        ++s;
+    }
+    for (n = 0; IS_DIGIT(*s); ++s) {
+        n = 10 * n + (*s - '0');
+    }
+
+    return sign * n;
 }

@@ -16,4 +16,10 @@
  */
 USIZE rtlStrlen(CHAR *str);
 
+/*
+ * Convert a string into a signed 32-bit
+ * integer
+ */
+LONG rtlToInt32(char *s);
+
 #endif  /* !_RTL_STRING_H_ */
