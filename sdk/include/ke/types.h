@@ -8,6 +8,12 @@
 #ifndef _KE_TYPES_H_
 #define _KE_TYPES_H_ 1
 
+#if defined(__cpluscplus)
+#define NULL nullptr
+#else
+#define NULL (void *)0
+#endif
+
 typedef _Bool           BOOLEAN;
 
 typedef unsigned char   UCHAR;
