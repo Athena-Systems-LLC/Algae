@@ -3,3 +3,4 @@
 *.d
 *.iso
 /cc
+/ntos/shim/

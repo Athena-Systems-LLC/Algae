@@ -5,34 +5,51 @@
  * Provided under the BSD 3-Clause license.
  */
 
+OUTPUT_FORMAT(elf64-x86-64)
+OUTPUT_ARCH(i386:x86-64)
 ENTRY(_start)
 
-SECTIONS {
-    . = 1M;
+PHDRS
+{
+    text          PT_LOAD    FLAGS((1 << 0) | (1 << 2)) ;
+    rodata        PT_LOAD    FLAGS((1 << 2)) ;
+    data          PT_LOAD    FLAGS((1 << 1) | (1 << 2)) ;
+}
 
-    .multiboot : {
-        *(.multiboot)
-    }
+SECTIONS
+{
+    . = 0xFFFFFFFF80000000;
 
-    .text BLOCK(4K) : ALIGN(4K)
-    {
-        *(.text)
-    }
+    .text : {
+        *(.text .text.*)
+    } :text
 
-    .rodata BLOCK(4K) : ALIGN(4K)
-    {
-        *(.rodata)
-    }
+    . += CONSTANT(MAXPAGESIZE);
 
-    .data BLOCK(4K) : ALIGN(4K)
-    {
+    .rodata : {
+        *(.rodata .rodata.*)
+    } :rodata
+
+    .modules : {
+        __modules_init_start = .;
+        KEEP(*(.modules .modules))
+        __modules_init_end = .;
+    } :rodata
+
+    . += CONSTANT(MAXPAGESIZE);
+
+    .data : {
         *(.data)
-    }
+    } :data
 
-    .bss BLOCK(4K) : ALIGN(4K)
-    {
+    .bss : {
         *(COMMON)
-        *(.bss)
+        *(.bss .bss.*)
+    } :data
+
+    . = ALIGN(64);
+    .data.cacheline_aligned : {
+        *(.data.cacheline_aligned)
     }
 
     /DISCARD/ : {
