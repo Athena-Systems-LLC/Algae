@@ -27,7 +27,6 @@ fetch() {
     mkdir -p cc/
     mkdir -p ntos/shim/
     try_fetch "git clone https://github.com/limine-bootloader/limine.git --branch=v9.3.0-binary --depth=1" "ntos/shim/limine"
-    try_fetch "git clone https://github.com/EthosZero/toolchain --depth=1" "cc/toolchain"
 }
 
 build_limine() {
