@@ -28,7 +28,7 @@ typedef long            LONG;
 typedef unsigned long long  UQUAD;
 typedef long long           QUAD;
 
-typedef QUAD USIZE;
-typedef QUAD ULONG_PTR;
+typedef UQUAD USIZE;
+typedef UQUAD ULONG_PTR;
 
 #endif  /* !_KE_TYPES_H_ */
