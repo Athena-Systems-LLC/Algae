@@ -16,15 +16,14 @@ CINC = -I../../include -I ../../target
 CFLAGS = -target x86_64-elf $(MD_CFLAGS) -MMD -I$(SDKDIR)/include/
 CFLAGS += $(CINC)
 CC =
-AS = as
-LD = ld
+LD = lld.ld
 
 .PHONY: all
 all: $(ASMOBJ) $(COBJ)
 	ld $(LD_FLAGS) $(OBJ) -o $(KERNEL_OUTPUT)
 
 %.S.o: %.S
-	$(AS) $(CINC) $< -o $@
+	$(CC) -c $(CFLAGS) $< -o $@
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
