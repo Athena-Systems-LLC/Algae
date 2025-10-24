@@ -14,7 +14,8 @@ LD =
 SDKDIR =
 
 .PHONY: all
-all: ke platform
+all: target ke platform
+	rm -rf target/
 
 .PHONY: platform
 platform:
@@ -23,6 +24,11 @@ platform:
 .PHONY: ke
 ke:
 	cd ke; make CC=$(CC) LD=$(LD) SDKDIR=$(SDKDIR)
+
+.PHONY: target
+target:
+	mkdir -p target/md/
+	rsync -avr include/platform/$(ARCH)/* target/md/
 
 .PHONY: clean
 clean:
