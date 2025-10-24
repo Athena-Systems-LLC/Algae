@@ -11,6 +11,7 @@ SDKDIR =
 
 CFILES = $(shell find . -name "*.c")
 CFILES += $(shell find ../rtl/ -name "*.c")
+CFILES += $(shell find ../ex/ -name "*.c")
 
 OBJECTS = $(CFILES:.c=.o)
 DEPS = $(CFILES:.c=.d)

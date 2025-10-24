@@ -6,11 +6,13 @@
  */
 
 #include <ke/boot.h>
+#include <ex/trace.h>
 
 void
 kMain(void)
 {
     kiPlatformInit();
     kiProcessorInit();
+    exTraceLn(EX_TRACE_INFO, "booting ALGAE...\n");
     for (;;);
 }
