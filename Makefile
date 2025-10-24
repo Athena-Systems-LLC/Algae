@@ -9,6 +9,7 @@ ARCH = amd64
 ISO_DEST = algae.iso
 QEMU_FLAGS = -cdrom $(ISO_DEST) --enable-kvm
 SHIMDIR = ntos/shim/limine/
+SDKDIR = $(shell pwd)/sdk
 CC := clang
 LD := ld
 
@@ -28,7 +29,7 @@ iso:
 
 .PHONY: ntos
 ntos:
-	cd ntos; make ARCH=$(ARCH) CC=$(CC) LD=$(LD)
+	cd ntos; make ARCH=$(ARCH) CC=$(CC) LD=$(LD) SDKDIR=$(SDKDIR)
 
 .PHONY: clean
 clean:

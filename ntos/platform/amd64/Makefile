@@ -1,3 +1,4 @@
+SDKDIR =
 OBJ = $(shell find ../../ -name "*.o")
 ASMFILES = $(shell find . -name "*.asm")
 ASMOBJ = $(ASMFILES:.asm=.asm.o)

@@ -11,17 +11,18 @@ ARCH =
 KERNEL_OUT = algae.sys
 CC =
 LD =
+SDKDIR =
 
 .PHONY: all
 all: ke platform
 
 .PHONY: platform
 platform:
-	cd platform/$(ARCH); make
+	cd platform/$(ARCH); make SDKDIR=$(SDKDIR)
 
 .PHONY: ke
 ke:
-	cd ke; make CC=$(CC) LD=$(LD)
+	cd ke; make CC=$(CC) LD=$(LD) SDKDIR=$(SDKDIR)
 
 .PHONY: clean
 clean:

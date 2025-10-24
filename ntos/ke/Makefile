@@ -7,11 +7,13 @@
 
 include ../data/sys.mk
 
+SDKDIR =
+
 CFILES = $(shell find . -name "*.c")
 OBJECTS = $(CFILES:.c=.o)
 DEPS = $(CFILES:.c=.d)
 
-CFLAGS = -target x86_64-elf $(MD_CFLAGS) -MMD
+CFLAGS = -target x86_64-elf $(MD_CFLAGS) -MMD -I$(SDKDIR)/include/
 CC =
 LD =
 
