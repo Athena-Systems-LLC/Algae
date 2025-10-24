@@ -9,9 +9,11 @@ include data/sys.mk
 
 ARCH =
 KERNEL_OUT = algae.sys
+CC =
+LD =
 
 .PHONY: all
-all: platform
+all: ke platform
 
 .PHONY: platform
 platform:
@@ -19,8 +21,9 @@ platform:
 
 .PHONY: ke
 ke:
-	cd ke; make ARCH=$(ARCH)
+	cd ke; make CC=$(CC) LD=$(LD)
 
 .PHONY: clean
 clean:
 	cd platform/$(ARCH); make clean
+	cd ke; make clean

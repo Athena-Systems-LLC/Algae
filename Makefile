@@ -8,6 +8,8 @@
 ARCH = amd64
 ISO_DEST = algae.iso
 QEMU_FLAGS = -cdrom $(ISO_DEST) --enable-kvm
+CC := clang
+LD := ld
 
 .PHONY: all
 all: ntos iso
@@ -18,7 +20,7 @@ iso:
 
 .PHONY: ntos
 ntos:
-	cd ntos; make ARCH=$(ARCH)
+	cd ntos; make ARCH=$(ARCH) CC=$(CC) LD=$(LD)
 
 .PHONY: clean
 clean:

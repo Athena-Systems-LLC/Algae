@@ -11,14 +11,23 @@
 %define MAGIC    0x1BADB002
 %define CHECKSUM -(MAGIC + FLAGS)
 
+extern kMain
+
 section .multiboot
 align 4
     dd MAGIC
     dd FLAGS
     dd CHECKSUM
 
+section .bss
+align 16
+stack_base: resb 4096  ;; 4K sized stack
+stack_top:
+
 section .text
 global _start
 _start:
     cli
-    hlt
+    mov esp, stack_top
+
+    jmp kMain

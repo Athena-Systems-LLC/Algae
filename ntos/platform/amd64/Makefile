@@ -1,4 +1,4 @@
-OBJ = $(shell find ../ -name "*.o")
+OBJ = $(shell find ../../ -name "*.o")
 ASMFILES = $(shell find . -name "*.asm")
 ASMOBJ = $(ASMFILES:.asm=.asm.o)
 LD_FLAGS := -Tconf/link.ld
@@ -8,7 +8,7 @@ LD = ld
 
 .PHONY: all
 all: $(ASMOBJ)
-	ld $(LD_FLAGS) $(ASMOBJ) -o $(KERNEL_OUTPUT)
+	ld $(LD_FLAGS) $(OBJ) -o $(KERNEL_OUTPUT)
 
 %.asm.o: %.asm
 	$(AS) $< -felf64 -o $@
