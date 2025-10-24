@@ -8,14 +8,25 @@
 #ifndef _KE_DEFS_H_
 #define _KE_DEFS_H_ 1
 
+#include <ke/types.h>
+
 /* Attribute macros */
 #define PACKED          __attribute__((__packed__))
 #define ALWAYS_INLINE   __attribute__((__always_inline__))
 
 /* Bitwise helpers */
 #define BIT(n) (1ULL << (n))
+#define ISSET(v, f)  ((v) & (f))
+#define MASK(n) ((1ULL << n) - 1)
 
 /* Misc macros */
 #define ASMV __asm__ __volatile__
+
+/*
+ * PTR_OFFSET: Adds an offset to the pointer
+ * PTR_NOFFSET: Subtracts a negative offset from the pointer
+ */
+#define PTR_OFFSET(PTR, OFF) ((void *)((ULONG_PTR)PTR + OFF))
+#define PTR_NOFFSET(PTR, NOFF) ((void *)((ULONG_PTR)PTR - NOFF))
 
 #endif  /* !_KE_DEFS_H_ */
