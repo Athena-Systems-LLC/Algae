@@ -14,12 +14,12 @@
  * Returns the length of the string `str'
  * in bytes, exclusive of the null terminator
  */
-USIZE rtlStrlen(CHAR *str);
+USIZE rtlStrlen(const char *str);
 
 /*
  * Convert a string into a signed 32-bit
  * integer
  */
-LONG rtlToInt32(char *s);
+LONG rtlToInt32(const char *s);
 
 #endif  /* !_RTL_STRING_H_ */

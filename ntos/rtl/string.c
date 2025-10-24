@@ -11,7 +11,7 @@
 #define IS_DIGIT(C) ((C >= '0' && C <= '9'))
 
 USIZE
-rtlStrlen(CHAR *str)
+rtlStrlen(const char *str)
 {
     USIZE i = 0;
 
@@ -24,7 +24,7 @@ rtlStrlen(CHAR *str)
 }
 
 LONG
-rtlToInt32(char *s)
+rtlToInt32(const char *s)
 {
     LONG n, sign;
 
