@@ -130,6 +130,10 @@ rtlBufPrintfV(char *s, USIZE size, const char *fmt, va_list ap)
             }
             printStr(s, size, &off, numBuf);
             break;
+        case 's':
+            tmpStr = va_arg(ap, const char *);
+            printStr(s, size, &off, tmpStr);
+            break;
         }
     }
 
