@@ -8,6 +8,17 @@
 #ifndef _HAL_CPU_H_
 #define _HAL_CPU_H_ 1
 
+typedef enum {
+    CPU_HALT_SELF,  /* Halt current core */
+} CPU_HALT_MODE;
+
 void halCpuInit(void);
+
+/*
+ * Halt the CPU with a specific mode
+ *
+ * @mode: See CPU_HALT_MODE
+ */
+void halCpuHalt(CPU_HALT_MODE mode);
 
 #endif  /* !_HAL_CPU_H_ */

@@ -7,6 +7,7 @@
 
 #include <hal/cpu.h>
 #include <ke/types.h>
+#include <ke/defs.h>
 #include <md/idt.h>
 #include <md/gdt.h>
 #include <md/idt.h>
@@ -31,6 +32,14 @@ halRegisterIntr(void)
     kiIdtSetEntry(0xC, IDT_TRAP_GATE, ISR(ss_fault), 0);
     kiIdtSetEntry(0xD, IDT_TRAP_GATE, ISR(general_prot), 0);
     kiIdtSetEntry(0xE, IDT_TRAP_GATE, ISR(page_fault), 0);
+}
+
+void
+halCpuHalt(CPU_HALT_MODE mode)
+{
+    for (;;) {
+        ASMV("cli; hlt");
+    }
 }
 
 void
