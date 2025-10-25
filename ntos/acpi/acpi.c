@@ -42,7 +42,6 @@ acpiQueryTable(const char *signature)
 
     for (USIZE i = 0; i < sdtLen; ++i) {
         hdr = (ACPI_HEADER *)PHYS_TO_VIRT(sdt->table[i]);
-        exTrace(EX_TRACE_INFO, "%s\n", hdr->signature);
         if (rtlMemcmp(hdr->signature, signature, sigLen) == 0) {
             return (void *)hdr;
         }
