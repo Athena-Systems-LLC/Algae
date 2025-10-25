@@ -30,4 +30,4 @@ all: $(ASMOBJ) $(COBJ)
 
 .PHONY: clean
 clean:
-	rm -f $(ASMOBJ)
+	rm -f $(ASMOBJ) $(COBJ)
