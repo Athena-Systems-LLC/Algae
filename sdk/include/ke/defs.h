@@ -15,6 +15,10 @@
 #define ALWAYS_INLINE   __attribute__((__always_inline__))
 #define NORETURN        __attribute__((__noreturn__))
 
+/* Min/max macros */
+#define MIN(a,b) (((a) < (b)) ? (a) : (b))
+#define MAX(a,b) (((a) > (b)) ? (a) : (b))
+
 /* Bitwise helpers */
 #define BIT(n) (1ULL << (n))
 #define ISSET(v, f)  ((v) & (f))
