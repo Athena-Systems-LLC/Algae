@@ -8,6 +8,8 @@
 #ifndef _HAL_CPU_H_
 #define _HAL_CPU_H_ 1
 
+#include <ke/kpcr.h>
+
 typedef enum {
     CPU_HALT_SELF,  /* Halt current core */
 } CPU_HALT_MODE;

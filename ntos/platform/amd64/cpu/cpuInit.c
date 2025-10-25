@@ -6,8 +6,10 @@
  */
 
 #include <hal/cpu.h>
+#include <ke/kpcr.h>
 #include <ke/types.h>
 #include <ke/defs.h>
+#include <md/msr.h>
 #include <md/idt.h>
 #include <md/gdt.h>
 #include <md/idt.h>
@@ -15,6 +17,7 @@
 
 #define ISR(fn) (ULONG_PTR)fn
 
+static KPCR bspKpcr;
 static struct gdtr gdtr;
 
 static void
@@ -42,6 +45,25 @@ halCpuHalt(CPU_HALT_MODE mode)
     }
 }
 
+KPCR *
+keGetCore(void)
+{
+    KPCR *kpcr;
+
+    if (rdmsr(IA32_GS_BASE) == 0) {
+        return NULL;
+    }
+
+    /* Use self field to get core */
+    ASMV(
+        "mov %%gs:%1, %0"
+        : "=r" (kpcr)
+        : "m" (*&((KPCR *)0)->self)
+    );
+
+    return kpcr;
+}
+
 void
 halCpuInit(void)
 {
@@ -52,4 +74,8 @@ halCpuInit(void)
     /* Enable interrupts */
     kiIdtLoad();
     halRegisterIntr();
+
+    /* Set the current processor */
+    bspKpcr.self = &bspKpcr;
+    wrmsr(IA32_GS_BASE, (ULONG_PTR)&bspKpcr);
 }
