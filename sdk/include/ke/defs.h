@@ -13,6 +13,7 @@
 /* Attribute macros */
 #define PACKED          __attribute__((__packed__))
 #define ALWAYS_INLINE   __attribute__((__always_inline__))
+#define NORETURN        __attribute__((__noreturn__))
 
 /* Bitwise helpers */
 #define BIT(n) (1ULL << (n))
