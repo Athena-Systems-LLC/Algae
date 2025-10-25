@@ -8,6 +8,7 @@
 #include <ke/trace.h>
 #include <ke/types.h>
 #include <rtl/string.h>
+#include <rtl/string.h>
 
 void
 exTraceLn(USHORT level, const char *ln)
@@ -20,4 +21,17 @@ exTraceLn(USHORT level, const char *ln)
 
     lnLen = rtlStrlen(ln);
     keSerialTrace(ln, lnLen);
+}
+
+void
+exTrace(USHORT level, const CHAR *fmt, ...)
+{
+    va_list ap;
+    char buf[256];
+
+    va_start(ap, fmt);
+    rtlBufPrintfV(buf, sizeof(buf), fmt, ap);
+
+    exTraceLn(level, buf);
+    va_end(ap);
 }

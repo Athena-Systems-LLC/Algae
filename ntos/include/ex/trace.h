@@ -21,4 +21,9 @@
  */
 void exTraceLn(USHORT level, const CHAR *ln);
 
+/*
+ * Trace using printf style formatting
+ */
+void exTrace(USHORT level, const CHAR *fmt, ...);
+
 #endif  /* !_EX_TRACE_H_ */
