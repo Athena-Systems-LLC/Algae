@@ -46,6 +46,6 @@ int rtlBufPrintfV(char *buf, USIZE bufsize, const char *fmt, va_list va);
 /*
  * Convert an integer to a string
  */
-char *rtlItoa(LONG value, char *buf, int base);
+char *rtlItoa(USIZE value, char *buf, int base);
 
 #endif  /* !_RTL_STRING_H_ */

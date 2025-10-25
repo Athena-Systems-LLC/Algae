@@ -9,10 +9,8 @@
 #include <ke/types.h>
 #include <rtl/string.h>
 
-static char *itoaBase10Convert(LONG value, char *buf);
-
 static char *
-itoaBase10Convert(LONG value, char *buf)
+itoaBase10Convert(USIZE value, char *buf)
 {
     USIZE i;
     UCHAR tmp;
@@ -55,7 +53,7 @@ itoaBase10Convert(LONG value, char *buf)
 }
 
 static char *
-itoaConvertBase16(LONG n, char *buffer)
+itoaConvertBase16(USIZE n, char *buffer)
 {
     BOOLEAN pad;
     UCHAR nibble;
@@ -101,7 +99,7 @@ itoaConvertBase16(LONG n, char *buffer)
 }
 
 char *
-rtlItoa(LONG value, char *buf, int base)
+rtlItoa(USIZE value, char *buf, int base)
 {
     switch (base) {
         case 10:
