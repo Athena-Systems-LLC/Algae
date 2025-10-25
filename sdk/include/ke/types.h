@@ -14,6 +14,9 @@
 #define NULL (void *)0
 #endif
 
+#define true 1
+#define false 0
+
 typedef _Bool           BOOLEAN;
 
 typedef unsigned char   UCHAR;
