@@ -41,4 +41,11 @@ struct bootParams {
  */
 int keGetBootParams(struct bootParams *res, int flags);
 
+/*
+ * Return the kernel base offset which is used to convert
+ * certain lower half physical addresses to higher half
+ * physical addresses.
+ */
+ULONG_PTR keGetKernelBase(void);
+
 #endif  /* !_KE_BOOTPARAM_H_ */
