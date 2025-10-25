@@ -6,6 +6,8 @@
  */
 
 #include <ke/bugCheck.h>
+#include <ke/vaargs.h>
+#include <rtl/string.h>
 #include <drv/bootVid.h>
 #include <hal/cpu.h>
 
@@ -15,8 +17,13 @@
 NORETURN
 void keBugCheck(const char *fmt, ...)
 {
+    va_list ap;
+    static char buf[512];
+
+    va_start(ap, fmt);
     bootVidClear(BUG_CHECK_BG);
 
+    rtlBufPrintfV(buf, sizeof(buf), fmt, ap);
     bootVidPrint(
         0,
         0,
@@ -31,7 +38,7 @@ void keBugCheck(const char *fmt, ...)
         FONT_HEIGHT,
         BUG_CHECK_FG,
         BUG_CHECK_BG,
-        fmt
+        buf
     );
 
     halCpuHalt(CPU_HALT_SELF);
