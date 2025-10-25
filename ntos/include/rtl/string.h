@@ -28,7 +28,6 @@ LONG rtlToInt32(const char *s);
  */
 void *rtlMemcpy(void *dest, const void *src, USIZE n);
 
-
 /*
  * Copy `n' instances of `c' to `s'
  */
