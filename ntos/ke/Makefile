@@ -19,7 +19,7 @@ OBJECTS = $(CFILES:.c=.o)
 DEPS = $(CFILES:.c=.d)
 
 CFLAGS = -target x86_64-elf $(MD_CFLAGS) -MMD -I$(SDKDIR)/include/
-CFLAGS += -I../include/
+CFLAGS += -I../include/ -I../target
 CC =
 LD =
 
