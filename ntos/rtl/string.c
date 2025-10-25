@@ -26,7 +26,7 @@ rtlMemcpy(void *dest, const void *src, USIZE n)
  * complain with certain things.
  */
 void *
-memset(void *s, int c, USIZE n)
+memset(void *s, int c, unsigned long n)
 {
     return rtlMemset(s, c, n);
 }
