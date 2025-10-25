@@ -132,9 +132,9 @@ rtlBufPrintfV(char *s, USIZE size, const char *fmt, va_list ap)
         case 'd':
         case 'u':
             if (c == 'd') {
-                num = va_arg(ap, LONG);
+                num = va_arg(ap, QUAD);
             } else {
-                num = va_arg(ap, ULONG);
+                num = va_arg(ap, UQUAD);
             }
 
             rtlItoa(num, numBuf, 10);
