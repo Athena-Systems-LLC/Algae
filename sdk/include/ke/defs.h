@@ -24,6 +24,11 @@
 #define ISSET(v, f)  ((v) & (f))
 #define MASK(n) ((1ULL << n) - 1)
 
+/* Bitmap helper macros */
+#define setBit(a, b) ((a)[(b) >> 3] |= BIT(b % 8))
+#define clrBit(a, b) ((a)[(b) >> 3] &= ~BIT(b % 8))
+#define testBit(a, b) (ISSET((a)[(b) >> 3], BIT(b % 8)))
+
 /* Misc macros */
 #define ASMV __asm__ __volatile__
 
