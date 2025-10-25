@@ -129,6 +129,22 @@ rtlBufPrintfV(char *s, USIZE size, const char *fmt, va_list ap)
             tmpLen = rtlStrlen(numBuf);
             printStr(s, size, &off, numBuf + 2);
             break;
+        case 'p':
+            num = va_arg(ap, UQUAD);
+            rtlItoa(num, numBuf, 16);
+            tmpLen = rtlStrlen(numBuf);
+
+            /* Add '0x' prefix */
+            printC(s, size, &off, '0');
+            printC(s, size, &off, 'x');
+
+            /* Pad */
+            for (USIZE i = 0; i < 18 - tmpLen; ++i) {
+                printC(s, size, &off, '0');
+            }
+
+            printStr(s, size, &off, numBuf + 2);
+            break;
         case 'd':
         case 'u':
             if (c == 'd') {
