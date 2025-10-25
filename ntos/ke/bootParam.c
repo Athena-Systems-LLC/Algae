@@ -24,6 +24,10 @@ static volatile struct limine_hhdm_request hhdmReq = {
     .id = LIMINE_HHDM_REQUEST,
     .revision = 0
 };
+static volatile struct limine_rsdp_request rsdpReq = {
+    .id = LIMINE_RSDP_REQUEST,
+    .revision = 0
+};
 
 static void
 getFbParams(struct fbParams *params)
@@ -56,10 +60,17 @@ keGetKernelBase(void)
 int
 keGetBootParams(struct bootParams *res, int flags)
 {
+    struct limine_rsdp_response *rsdpResp;
+
     if (res == NULL) {
         return -1;
     }
 
     getFbParams(&res->fbParams);
+    /* We need this for proper operation */
+    if ((rsdpResp = rsdpReq.response) == NULL) {
+        keBugCheck("bootvars: could not get ACPI RSDP\n");
+    }
+    res->acpiRsdp = rsdpResp->address;
     return 0;
 }

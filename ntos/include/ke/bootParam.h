@@ -28,6 +28,7 @@ struct fbParams {
  */
 struct bootParams {
     struct fbParams fbParams;
+    void *acpiRsdp;
 };
 
 /*

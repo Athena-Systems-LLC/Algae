@@ -8,6 +8,7 @@
 #include <ke/boot.h>
 #include <hal/uart.h>
 #include <hal/cpu.h>
+#include <acpi/acpi.h>
 #include <mm/phys.h>
 
 int
@@ -15,6 +16,7 @@ kiPlatformInit(void)
 {
     halUartInit();
     mmPhysInit();
+    acpiInit();
     return 0;
 }
 
