@@ -22,8 +22,8 @@ typedef char            CHAR;
 typedef unsigned short  USHORT;
 typedef short           SHORT;
 
-typedef unsigned long   ULONG;
-typedef long            LONG;
+typedef unsigned int    ULONG;
+typedef int             LONG;
 
 typedef unsigned long long  UQUAD;
 typedef long long           QUAD;
