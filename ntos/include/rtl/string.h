@@ -9,6 +9,7 @@
 #define _RTL_STRING_H_ 1
 
 #include <ke/types.h>
+#include <ke/vaargs.h>
 
 /*
  * Returns the length of the string `str'
@@ -21,5 +22,26 @@ USIZE rtlStrlen(const char *str);
  * integer
  */
 LONG rtlToInt32(const char *s);
+
+/*
+ * Copy `src' to `dest' buffer with `n` bytes
+ */
+void *rtlMemcpy(void *dest, const void *src, USIZE n);
+
+
+/*
+ * Copy `n' instances of `c' to `s'
+ */
+void *rtlMemset(void *s, int c, USIZE n);
+
+/*
+ * Copy a printf-style format string to a buffer
+ */
+int rtlBufPrintfV(char *buf, USIZE bufsize, const char *fmt, va_list va);
+
+/*
+ * Convert an integer to a string
+ */
+char *rtlItoa(LONG value, char *buf, int base);
 
 #endif  /* !_RTL_STRING_H_ */
