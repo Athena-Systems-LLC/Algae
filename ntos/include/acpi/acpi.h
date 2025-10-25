@@ -9,6 +9,7 @@
 #define _DRV_ACPI_H_
 
 #include <ke/types.h>
+#include <acpi/tables.h>
 
 /*
  * Initialize the ACPI subsystem
@@ -20,5 +21,11 @@ void acpiInit(void);
  * on success, otherwise NULL if not found
  */
 void *acpiQueryTable(const char *signature);
+
+/*
+ * Read an ACPI MADT entry of type 'type' and invoke
+ * callback 'cb'
+ */
+int acpiReadMadt(ULONG type, int(*cb)(APIC_HEADER *, USIZE arg), USIZE arg);
 
 #endif  /* !_DRV_ACPI_H_ */

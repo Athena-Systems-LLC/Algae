@@ -48,4 +48,22 @@ typedef struct PACKED {
     ULONG table[];
 } ACPI_ROOT_SDT;
 
+typedef struct PACKED {
+    UCHAR type;
+    UCHAR length;
+} APIC_HEADER;
+
+typedef struct PACKED {
+    ACPI_HEADER hdr;
+    ULONG lapicAddr;
+    ULONG flags;
+} ACPI_MADT;
+
+typedef struct PACKED {
+    APIC_HEADER hdr;
+    UCHAR processorId;
+    UCHAR apicId;
+    ULONG flags;
+} LOCAL_APIC;
+
 #endif  /* !_ACPI_TABLES_H_ */
