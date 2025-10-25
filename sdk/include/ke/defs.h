@@ -30,4 +30,7 @@
 #define PTR_OFFSET(PTR, OFF) ((void *)((ULONG_PTR)PTR + OFF))
 #define PTR_NOFFSET(PTR, NOFF) ((void *)((ULONG_PTR)PTR - NOFF))
 
+/* Number of elements in an array */
+#define NELEM(a) (sizeof(a) / sizeof(a[0]))
+
 #endif  /* !_KE_DEFS_H_ */
