@@ -44,6 +44,11 @@ int rtlMemcmp(const void *s1, const void *s2, USIZE n);
 int rtlBufPrintfV(char *buf, USIZE bufsize, const char *fmt, va_list va);
 
 /*
+ * Like rtlBufPrintfV() but without `va'
+ */
+int rtlBufPrintf(char *buf, USIZE bufsize, const char *fmt, ...);
+
+/*
  * Convert an integer to a string
  */
 char *rtlItoa(USIZE value, char *buf, int base);
