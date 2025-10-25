@@ -91,6 +91,8 @@ bootVidPrint(ULONG x, ULONG y, ULONG fg, ULONG bg, const char *str)
         ch.x = x + (i * 8);
         bootVidDrawCh(&ch);
     }
+
+    return 0;
 }
 
 void
