@@ -34,6 +34,11 @@ void *rtlMemcpy(void *dest, const void *src, USIZE n);
 void *rtlMemset(void *s, int c, USIZE n);
 
 /*
+ * Compare two arrays of bytes
+ */
+int rtlMemcmp(const void *s1, const void *s2, USIZE n);
+
+/*
  * Copy a printf-style format string to a buffer
  */
 int rtlBufPrintfV(char *buf, USIZE bufsize, const char *fmt, va_list va);

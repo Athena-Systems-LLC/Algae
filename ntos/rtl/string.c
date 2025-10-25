@@ -21,6 +21,22 @@ rtlMemcpy(void *dest, const void *src, USIZE n)
     return dest;
 }
 
+int
+rtlMemcmp(const void *s1, const void *s2, USIZE n)
+{
+	if (n != 0) {
+        const UCHAR *p1 = s1, *p2 = s2;
+
+		do {
+			if (*p1++ != *p2++) {
+				return (*--p1 - *--p2);
+            }
+		} while (--n != 0);
+    }
+
+    return 0;
+}
+
 /*
  * Alias of rtlMemset() so compilers don't
  * complain with certain things.
