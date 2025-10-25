@@ -8,11 +8,14 @@
 #include <ke/boot.h>
 #include <hal/uart.h>
 #include <hal/cpu.h>
+#include <mm/phys.h>
 
 int
 kiPlatformInit(void)
 {
-    return halUartInit();
+    halUartInit();
+    mmPhysInit();
+    return 0;
 }
 
 int
