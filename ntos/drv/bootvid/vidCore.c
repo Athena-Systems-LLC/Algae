@@ -8,6 +8,7 @@
 #include <ke/types.h>
 #include <ke/bootParam.h>
 #include <ke/defs.h>
+#include <rtl/string.h>
 #include <drv/bootVid.h>
 
 extern UCHAR g_consFont[];
@@ -63,6 +64,33 @@ bootVidDrawCh(BOOTVID_CHAR *chp)
     }
 
     return 0;
+}
+
+int
+bootVidPrint(ULONG x, ULONG y, ULONG fg, ULONG bg, const char *str)
+{
+    ULONG strLen;
+    BOOTVID_CHAR ch;
+
+    if (str == NULL) {
+        return -1;
+    }
+
+    ch.fg = fg;
+    ch.bg = bg;
+    ch.y = y;
+
+    strLen = rtlStrlen(str);
+    for (ULONG i = 0; i < strLen; ++i) {
+        ch.ch = str[i];
+        if (ch.ch == '\n') {
+            ch.y += FONT_HEIGHT;
+            ch.x = 0;
+            continue;
+        }
+        ch.x = x + (i * 8);
+        bootVidDrawCh(&ch);
+    }
 }
 
 void

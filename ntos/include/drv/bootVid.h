@@ -9,8 +9,11 @@
 #define _DRV_BOOTVID_H_ 1
 
 #include <ke/types.h>
+#include <ke/defs.h>
 
 #define FONT_HDRLEN (sizeof(PSF_FONT))
+#define FONT_WIDTH 8
+#define FONT_HEIGHT 20
 
 /*
  * Represents a single character that can be
@@ -49,5 +52,23 @@ void bootVidClear(ULONG rgb);
  * @chp: Character descriptor to draw
  */
 int bootVidDrawCh(BOOTVID_CHAR *chp);
+
+/*
+ * Print a string to the screen
+ *
+ * @x: X position
+ * @y: Y position
+ * @fg: Foreground color
+ * @bg: Background color
+ * @str: String to render
+ *
+ * XXX: `str' must be NULL terminated
+ *
+ * Returns zero on success
+ */
+int bootVidPrint(
+    ULONG x, ULONG y, ULONG fg,
+    ULONG bg, const char *str
+);
 
 #endif  /* !_DRV_BOOTVID_H_ */
