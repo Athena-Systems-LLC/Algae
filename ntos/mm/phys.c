@@ -9,9 +9,11 @@
 #include <mm/vm.h>
 #include <ke/bugCheck.h>
 #include <ke/defs.h>
+#include <ke/spinlock.h>
 #include <rtl/string.h>
 #include <rtl/limine.h>
 
+static KSPIN_LOCK lock;
 static USIZE highestFrameIdx;
 static USIZE bitmapSize;
 static USIZE nFramesFree;
@@ -140,6 +142,7 @@ mmAllocFrame(USIZE count)
 {
     ULONG_PTR ret;
 
+    keAcquireSpinLock(&lock);
     framesUsed += count;
     framesFree -= count;
     if ((ret = mmDoAllocFrames(count)) == 0) {
@@ -147,6 +150,7 @@ mmAllocFrame(USIZE count)
         ret = mmDoAllocFrames(count);
     }
 
+    keReleaseSpinLock(&lock);
     return ret;
 }
 
@@ -155,6 +159,7 @@ mmFreeFrame(ULONG_PTR base, USIZE count)
 {
     USIZE p, stop_at;
 
+    keAcquireSpinLock(&lock);
     p = ALIGN_UP(base, PAGESIZE);
     stop_at = p + (count * PAGESIZE);
 
@@ -162,6 +167,8 @@ mmFreeFrame(ULONG_PTR base, USIZE count)
         clrBit(bitmap, p / PAGESIZE);
         p += PAGESIZE;
     }
+
+    keReleaseSpinLock(&lock);
 }
 
 void
