@@ -9,6 +9,10 @@
 #define _MACHINE_MCB_H_ 1
 
 #include <ke/types.h>
+#include <ke/defs.h>
+
+#define MD_SPINWAIT() \
+    ASMV("rep; nop")
 
 /*
  * The machine core block is architecture dependent and
