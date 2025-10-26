@@ -7,6 +7,7 @@
 
 #include <ex/pool.h>
 #include <ke/types.h>
+#include <ke/spinlock.h>
 #include <ke/bugCheck.h>
 #include <mm/phys.h>
 #include <mm/tlsf.h>
@@ -15,6 +16,7 @@
 #define POOLSIZE_BYTES 0x2000000  /* 4 MiB */
 #define POOLSIZE_PAGES (POOLSIZE_BYTES / PAGESIZE)
 
+static KSPIN_LOCK lock;
 static BOOLEAN isInit = false;
 static ULONG_PTR poolPhysBase;
 static tlsf_t tlsfCtx;
@@ -23,17 +25,24 @@ static void *poolVirtBase;
 void
 exFreePool(void *pool)
 {
+    keAcquireSpinLock(&lock);
     tlsf_free(tlsfCtx, pool);
+    keReleaseSpinLock(&lock);
 }
 
 void *
 exAllocatePool(POOL_TYPE type, USIZE length)
 {
+    void *tmp;
+
     if (!isInit) {
         return NULL;
     }
 
-    return tlsf_malloc(tlsfCtx, length);
+    keAcquireSpinLock(&lock);
+    tmp = tlsf_malloc(tlsfCtx, length);
+    keReleaseSpinLock(&lock);
+    return tmp;
 }
 
 void
