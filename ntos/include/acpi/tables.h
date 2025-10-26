@@ -66,4 +66,20 @@ typedef struct PACKED {
     ULONG flags;
 } LOCAL_APIC;
 
+typedef struct PACKED {
+    APIC_HEADER hdr;
+    UCHAR ioapicId;
+    UCHAR reserved;
+    ULONG ioapicAddr;
+    ULONG gsiBase;
+} IO_APIC;
+
+typedef struct PACKED {
+    APIC_HEADER hdr;
+    UCHAR bus;
+    UCHAR source;         /* IRQ */
+    ULONG interrupt;      /* GSI */
+    USHORT flags;
+} INTERRUPT_OVERRIDE;
+
 #endif  /* !_ACPI_TABLES_H_ */

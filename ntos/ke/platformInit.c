@@ -7,6 +7,7 @@
 
 #include <ke/boot.h>
 #include <hal/uart.h>
+#include <hal/intr.h>
 #include <hal/cpu.h>
 #include <acpi/acpi.h>
 #include <mm/phys.h>
@@ -17,6 +18,7 @@ kiPlatformInit(void)
     halUartInit();
     mmPhysInit();
     acpiInit();
+    halInitIrqChip();
     return 0;
 }
 
