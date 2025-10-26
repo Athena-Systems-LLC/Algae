@@ -8,31 +8,81 @@
 #include <ke/bugCheck.h>
 #include <ke/vaargs.h>
 #include <ke/bootParam.h>
+#include <ke/kpcr.h>
 #include <rtl/string.h>
 #include <drv/bootVid.h>
 #include <hal/cpu.h>
-
-#define BUG_CHECK_BG 0x021AE1
-#define BUG_CHECK_FG 0xFFFFFF
-
-/* Heading parameters */
-#define HEADING_FG BUG_CHECK_BG
-#define HEADING_BG 0xAAAAAA
-
-/* Body parameters */
-#define BODY_FG BUG_CHECK_FG
-#define BODY_BG BUG_CHECK_BG
-
-/* Diagnosis parameters */
-#define DIAG_FG BODY_FG
-#define DIAG_BG BODY_BG
+#include <hal/bugCheck.h>
 
 static struct bootParams params;
 static struct fbParams *fbParams;
 static ULONG curLogLine = 4;
 
 static void
-bugCheckPrint(ULONG fg, ULONG bg, const char *fmt, ...)
+bugCheckDump(const char *fmt, va_list diag_ap)
+{
+    static va_list ap;
+    static char fmtbuf[256];
+    static char heading[32];
+    static char msg[256];
+    static KPCR *kpcr;
+
+    kpcr = keGetCore();
+
+    /* Print the heading */
+    kiBugCheckPrint(
+        HEADING_FG,
+        HEADING_BG,
+        "ALGAE BUGCHECK"
+    );
+
+    /* Now the body */
+    ++curLogLine;
+    kiBugCheckPrint(
+        BODY_FG,
+        BODY_BG,
+        "A fatal error has occured and the system has been halted "
+        "to prevent damage to the machine"
+    );
+
+    /* Some bug reporting information */
+    kiBugCheckPrint(
+        BODY_FG,
+        BODY_BG,
+        "Please report this bug to ian@osmora.org"
+    );
+
+    /* Prep the actual error message */
+    rtlBufPrintfV(
+        fmtbuf,
+        sizeof(fmtbuf),
+        fmt,
+        diag_ap
+    );
+
+    ++curLogLine;
+    kiBugCheckPrint(
+        DIAG_FG,
+        DIAG_BG,
+        fmtbuf
+    );
+
+    /* Print the current cpu if possible */
+    if (kpcr != NULL) {
+        kiBugCheckPrint(
+            DIAG_FG,
+            DIAG_BG,
+            "occured on cpu%d\n",
+            kpcr->vId
+        );
+    }
+
+    ++curLogLine;
+    halDumpStack();
+}
+
+void
+kiBugCheckPrint(ULONG fg, ULONG bg, const char *fmt, ...)
 {
     va_list ap;
     static char msg[256];
@@ -59,53 +109,6 @@ bugCheckPrint(ULONG fg, ULONG bg, const char *fmt, ...)
 #undef CENTER_XPOS
     ++curLogLine;
     va_end(ap);
-}
-
-static void
-bugCheckDump(const char *fmt, va_list diag_ap)
-{
-    static va_list ap;
-    static char fmtbuf[256];
-    static char heading[32];
-    static char msg[256];
-
-    /* Print the heading */
-    bugCheckPrint(
-        HEADING_FG,
-        HEADING_BG,
-        "ALGAE BUGCHECK"
-    );
-
-    /* Now the body */
-    ++curLogLine;
-    bugCheckPrint(
-        BODY_FG,
-        BODY_BG,
-        "A fatal error has occured and the system has been halted "
-        "to prevent damage to the machine"
-    );
-
-    /* Some bug reporting information */
-    bugCheckPrint(
-        BODY_FG,
-        BODY_BG,
-        "Please report this bug to ian@osmora.org"
-    );
-
-    /* Prep the actual error message */
-    rtlBufPrintfV(
-        fmtbuf,
-        sizeof(fmtbuf),
-        fmt,
-        diag_ap
-    );
-
-    ++curLogLine;
-    bugCheckPrint(
-        DIAG_FG,
-        DIAG_BG,
-        fmtbuf
-    );
 }
 
 NORETURN
