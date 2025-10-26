@@ -15,6 +15,7 @@ CFILES += $(shell find ../ex/ -name "*.c")
 CFILES += $(shell find ../drv/ -name "*.c")
 CFILES += $(shell find ../mm/ -name "*.c")
 CFILES += $(shell find ../acpi/ -name "*.c")
+CFILES += $(shell find ../ob/ -name "*.c")
 
 OBJECTS = $(CFILES:.c=.o)
 DEPS = $(CFILES:.c=.d)
