@@ -6,11 +6,14 @@
  */
 
 #include <ke/boot.h>
+#include <ex/pool.h>
 
 void
 kMain(void)
 {
     kiPlatformInit();
     kiProcessorInit();
+    kiPoolInit();
+
     for (;;);
 }
