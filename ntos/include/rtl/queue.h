@@ -19,7 +19,7 @@
 struct name {								\
 	struct type *tqh_first;	/* first element */			\
 	struct type **tqh_last;	/* addr of last next element */		\
-    size_t nelem;           /* Number of elements */            \
+    USIZE nelem;           /* Number of elements */            \
 }
 
 #define TAILQ_HEAD_INITIALIZER(head)					\
