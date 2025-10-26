@@ -21,10 +21,12 @@
  *
  * @lapicBase: Virtual Local APIC MMIO base address
  * @hwId: Local APIC ID
+ * @hasX2Apic: Supports x2APIC mode if true
  */
 typedef struct {
     ULONG_PTR lapicBase;
     USHORT hwId;
+    BOOLEAN hasX2Apic;
 } MCB;
 
 #endif  /* !_MACHINE_MCB_H_ */

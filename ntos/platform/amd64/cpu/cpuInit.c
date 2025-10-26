@@ -9,6 +9,7 @@
 #include <ke/kpcr.h>
 #include <ke/types.h>
 #include <ke/defs.h>
+#include <md/lapic.h>
 #include <md/msr.h>
 #include <md/idt.h>
 #include <md/gdt.h>
@@ -78,4 +79,7 @@ halCpuInit(void)
     /* Set the current processor */
     bspKpcr.self = &bspKpcr;
     wrmsr(IA32_GS_BASE, (ULONG_PTR)&bspKpcr);
+
+    /* Enable the Local APIC unit */
+    kiLapicInit();
 }
