@@ -14,6 +14,7 @@
 #define PACKED          __attribute__((__packed__))
 #define ALWAYS_INLINE   __attribute__((__always_inline__))
 #define NORETURN        __attribute__((__noreturn__))
+#define WEAK            __attribute__((__weak__))
 
 /* Min/max macros */
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))
