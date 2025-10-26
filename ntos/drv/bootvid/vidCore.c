@@ -79,17 +79,19 @@ bootVidPrint(ULONG x, ULONG y, ULONG fg, ULONG bg, const char *str)
     ch.fg = fg;
     ch.bg = bg;
     ch.y = y;
+    ch.x = x;
 
     strLen = rtlStrlen(str);
     for (ULONG i = 0; i < strLen; ++i) {
         ch.ch = str[i];
         if (ch.ch == '\n') {
             ch.y += FONT_HEIGHT;
-            ch.x = 0;
+            ch.x = x;
             continue;
         }
-        ch.x = x + (i * 8);
+
         bootVidDrawCh(&ch);
+        ch.x += FONT_WIDTH;
     }
 
     return 0;
