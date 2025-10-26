@@ -10,5 +10,6 @@
 
 int kiPlatformInit(void);
 int kiProcessorInit(void);
+void kiBootScreen(void);
 
 #endif  /* !_KE_BOOT_H_ */

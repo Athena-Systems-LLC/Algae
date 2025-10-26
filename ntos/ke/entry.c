@@ -13,6 +13,7 @@ kMain(void)
 {
     kiPlatformInit();
     kiProcessorInit();
+    kiBootScreen();
     kiPoolInit();
 
     for (;;);
