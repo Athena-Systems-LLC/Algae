@@ -4,3 +4,4 @@
 *.iso
 /cc
 /ntos/shim/
+/ntos/ke/ksyms.c

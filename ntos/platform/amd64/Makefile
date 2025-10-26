@@ -21,6 +21,9 @@ LD = lld.ld
 .PHONY: all
 all: $(ASMOBJ) $(COBJ)
 	ld $(LD_FLAGS) $(OBJ) -o $(KERNEL_OUTPUT)
+	../../../tools/ksyms ../../ke/ksyms.c $(KERNEL_OUTPUT)
+	$(CC) -c $(CFLAGS) ../../ke/ksyms.c -o ../../ke/ksyms.o
+	ld $(LD_FLAGS) $(OBJ) -o $(KERNEL_OUTPUT)
 
 %.S.o: %.S
 	$(CC) -c $(CFLAGS) $< -o $@
