@@ -12,7 +12,7 @@
 
 #define MAX_FRAMES 8
 
-extern struct {
+extern WEAK struct {
 	UQUAD addr;
 	char *name;
 } g_ksymTbl[];
