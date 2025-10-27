@@ -23,6 +23,7 @@
  *
  * @lapicBase: Virtual Local APIC MMIO base address
  * @hwId: Local APIC ID
+ * @lapicTmrFreq: Frequency of Local APIC timer
  * @hasX2Apic: Supports x2APIC mode if true
  * @gdt: Global descriptor table
  * @gdtr: Global descriptor table register
@@ -31,6 +32,7 @@
 typedef struct {
     ULONG_PTR lapicBase;
     USHORT hwId;
+    USIZE lapicTmrFreq;
     BOOLEAN hasX2Apic;
     GDT_ENTRY gdt[GDT_ENTRY_COUNT];
     GDT_GDTR gdtr;

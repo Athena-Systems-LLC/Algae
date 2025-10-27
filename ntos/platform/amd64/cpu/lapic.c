@@ -15,6 +15,7 @@
 #include <acpi/acpi.h>
 #include <acpi/tables.h>
 #include <md/lapic.h>
+#include <md/i8254.h>
 #include <md/cpuid.h>
 #include <md/mcb.h>
 #include <md/msr.h>
@@ -40,6 +41,8 @@
 #define LAPIC_DCR           0x03E0U     /* Divide Configuration Register (for timer) */
 #define LAPIC_INIT_CNT      0x0380U     /* Initial Count Register (for timer) */
 #define LAPIC_CUR_CNT       0x0390U     /* Current Count Register (for timer) */
+
+#define LAPIC_TMR_SAMPLES 0xFFFF
 
 /*
  * The x2APIC register space is accessed via
@@ -240,10 +243,47 @@ lapicEnable(MCB *core)
     );
 }
 
+/*
+ * Stop and mask the Local APIC timer
+ */
+static void
+lapicStopTimer(MCB *core)
+{
+    lapicWrite(core, LAPIC_LVT_TMR, LAPIC_LVT_MASK);
+    lapicWrite(core, LAPIC_INIT_CNT, 0);
+}
+
+/*
+ * Initialize the Local APIC timer
+ */
+static USIZE
+lapicTimerInit(MCB *core)
+{
+    USHORT ticksStart, ticksEnd;
+    USIZE ticksTotal, frequency;
+
+    lapicStopTimer(core);
+    pitSetCount(LAPIC_TMR_SAMPLES);
+    ticksStart = pitGetCount();
+
+    /* Begin sampling */
+    lapicWrite(core, LAPIC_INIT_CNT, LAPIC_TMR_SAMPLES);
+    while (lapicRead(core, LAPIC_CUR_CNT) > 0);
+
+    /* Compute the total number of ticks */
+    ticksEnd = pitGetCount();
+    ticksTotal = (ticksStart - ticksEnd);
+
+    frequency = (LAPIC_TMR_SAMPLES / ticksTotal) * I8254_DIVIDEND;
+    lapicStopTimer(core);
+    return frequency;
+}
+
 void
 kiLapicInit(void)
 {
     KPCR *kpcr = keGetCore();
+    MCB *core = &kpcr->core;
 
     /*
      * Currently, ALGAE relies on the presense of a
@@ -254,5 +294,8 @@ kiLapicInit(void)
     }
 
     /* Enable the APIC unit */
-    lapicEnable(&kpcr->core);
+    lapicEnable(core);
+
+    /* Calibrate the built-in timer */
+    core->lapicTmrFreq = lapicTimerInit(core);
 }
