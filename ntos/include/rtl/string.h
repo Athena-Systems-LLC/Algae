@@ -29,6 +29,11 @@ LONG rtlToInt32(const char *s);
 void *rtlMemcpy(void *dest, const void *src, USIZE n);
 
 /*
+ * Compare string `s1' and 's2'
+ */
+int rtlStrcmp(const char *s1, const char *s2);
+
+/*
  * Copy `n' instances of `c' to `s'
  */
 void *rtlMemset(void *s, int c, USIZE n);

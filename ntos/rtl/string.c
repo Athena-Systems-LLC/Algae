@@ -55,6 +55,18 @@ void *rtlMemset(void *s, int c, USIZE n) {
     return s;
 }
 
+int
+rtlStrcmp(const char *s1, const char *s2)
+{
+    while (*s1 == *s2++) {
+        if (*s1++ == 0) {
+            return (0);
+        }
+    }
+
+    return (*(UCHAR *)s1 - *(UCHAR *)--s2);
+}
+
 static inline void
 printC(char *buf, USIZE size, USIZE *off, char c)
 {
