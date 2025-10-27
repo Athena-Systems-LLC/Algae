@@ -11,6 +11,7 @@
 #include <ke/types.h>
 #include <ke/defs.h>
 #include <md/gdt.h>
+#include <md/tssVar.h>
 
 #define MD_SPINWAIT() \
     ASMV("rep; nop")
@@ -25,6 +26,7 @@
  * @hasX2Apic: Supports x2APIC mode if true
  * @gdt: Global descriptor table
  * @gdtr: Global descriptor table register
+ * @tss: Task state segment
  */
 typedef struct {
     ULONG_PTR lapicBase;
@@ -32,6 +34,7 @@ typedef struct {
     BOOLEAN hasX2Apic;
     GDT_ENTRY gdt[GDT_ENTRY_COUNT];
     GDT_GDTR gdtr;
+    TSS_ENTRY tss;
 } MCB;
 
 #endif  /* !_MACHINE_MCB_H_ */

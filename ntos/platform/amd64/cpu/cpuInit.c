@@ -10,6 +10,7 @@
 #include <ke/types.h>
 #include <ke/defs.h>
 #include <rtl/string.h>
+#include <md/tss.h>
 #include <md/lapic.h>
 #include <md/msr.h>
 #include <md/idt.h>
@@ -55,6 +56,20 @@ cpuInitGdt(MCB *mcb)
     kiGdtLoad(gdtr);
 }
 
+static void
+cpuInitTss(KPCR *kpcr)
+{
+    MCB *mcb;
+
+    if (kpcr == NULL) {
+        return;
+    }
+
+    mcb = &kpcr->core;
+    tssWrite(kpcr, (TSS_DESC *)&mcb->gdt[GDT_TSS_INDEX]);
+    tssLoad();
+}
+
 void
 halCpuHalt(CPU_HALT_MODE mode)
 {
@@ -90,6 +105,9 @@ halCpuInit(void)
     /* Enable interrupts */
     kiIdtLoad();
     halRegisterIntr();
+
+    /* Load the TSS */
+    cpuInitTss(&bspKpcr);
 
     /* Set the current processor */
     bspKpcr.self = &bspKpcr;
