@@ -7,6 +7,7 @@
 
 #include <ke/boot.h>
 #include <ex/pool.h>
+#include <ob/objectStore.h>
 
 void
 kMain(void)
@@ -15,6 +16,6 @@ kMain(void)
     kiProcessorInit();
     kiBootScreen();
     kiPoolInit();
-
+    kiObjStoreInit();
     for (;;);
 }

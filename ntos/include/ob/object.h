@@ -10,6 +10,7 @@
 
 #include <ntstatus.h>
 #include <ke/types.h>
+#include <rtl/queue.h>
 
 #define NT_OBNAME_LEN 32    /* Max length of object name */
 
@@ -28,10 +29,12 @@ typedef enum {
  * Arguments for creating objects are stored
  * in here
  *
+ * @parent: Path of parent                    [NULL if unused]
  * @name: Name string (duplicated internally) [REQUIRED]
  * @type: Type of object to create            [REQUIRED]
  */
 typedef struct {
+    const CHAR *parent;
     const CHAR *name;
     NT_OBJECT_TYPE type;
 } NT_OBJECT_CREATE;
@@ -42,13 +45,29 @@ typedef struct {
  *
  * @type: Resource type (see NT_OB_*)
  * @name: Name of object
+ * @ref: Reference count
  * @data: Underlying object data
+ * @link: Used for object directories
  */
-typedef struct {
+typedef struct nt_obj {
     NT_OBJECT_TYPE type;
     CHAR name[NT_OBNAME_LEN];
+    USHORT ref;
     void *data;
+    TAILQ_ENTRY(nt_obj) link;
 } NT_OBJECT;
+
+/*
+ * Represents an object directory that stores a list
+ * of objects
+ *
+ * @dir: Directory of objects
+ * @numEnt: Number of objects in this directory
+ */
+typedef struct {
+    TAILQ_HEAD(, nt_obj) dir;
+    USIZE numEnt;
+} NT_OBJECTDIR;
 
 /*
  * Create an object with specific parameters
@@ -67,5 +86,18 @@ NTSTATUS obCreateObject(
  * @object: Object to free from memory
  */
 NTSTATUS obFreeObject(NT_OBJECT *object);
+
+/*
+ * Lookup an object from the object
+ * namespace
+ *
+ * @path: Path of object
+ * @result: Result is written here
+ * @flags: Optional flags
+ */
+NTSTATUS obLookupObject(
+    const CHAR *path, NT_OBJECT **result,
+    USHORT flags
+);
 
 #endif  /* !_OB_OBJECT_H_ */
