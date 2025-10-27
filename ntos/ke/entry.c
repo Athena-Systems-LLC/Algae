@@ -6,6 +6,7 @@
  */
 
 #include <ke/boot.h>
+#include <ke/timer.h>
 #include <ex/pool.h>
 #include <ob/objectStore.h>
 
@@ -17,5 +18,6 @@ kMain(void)
     kiBootScreen();
     kiPoolInit();
     kiObjStoreInit();
+    kiTimersInit();
     for (;;);
 }
