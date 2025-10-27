@@ -18,6 +18,8 @@
 typedef struct ktimer {
     NTSTATUS(*msleep)(struct ktimer *self, USIZE msec);
     NTSTATUS(*usleep)(struct ktimer *self, USIZE usec);
+    USIZE(*getCount)(struct ktimer *self);
+    void(*setCount)(struct ktimer *self, USIZE count);
 } KTIMER;
 
 /*
