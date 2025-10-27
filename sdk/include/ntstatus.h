@@ -19,6 +19,7 @@ typedef ULONG NTSTATUS;
 #define STATUS_INVALID_HANDLE   0xC0000008  /* Invalid handle */
 #define STATUS_BAD_OBJ_TYPE     0xC0000024  /* Bad object type */
 #define STATUS_OBJECT_NOTFOUND  0xC0000034  /* Object name not found */
+#define STATUS_NOT_DIRECTORY    0xC0000039  /* Not a directory */
 #define STATUS_FILE_UNAVL       0xC0000467  /* File unavailable */
 
 #endif  /* !_SDK_NTSTATUS_H_ */
