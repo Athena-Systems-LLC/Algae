@@ -227,7 +227,6 @@ obLookupObject(const CHAR *path, NT_OBJECT **result, USHORT flags)
         }
 
         component[i] = '\0';
-        exTrace(EX_TRACE_INFO, "%s\n", component);
         status = obDirectoryLookup(
             curObject,
             component,
