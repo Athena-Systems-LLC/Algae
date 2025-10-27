@@ -30,6 +30,16 @@ timerCreateStore(void)
     create.name = "clkdev";
     create.type = NT_OB_DIRECTORY;
     status = obCreateObject(&create, &clkdevDir);
+    if (status != 0) {
+        return status;
+    }
+
+    status = obAllocateDir(clkdevDir);
+    if (status != STATUS_SUCCESS) {
+        obFreeObject(clkdevDir);
+        return status;
+    }
+
     return status;
 }
 

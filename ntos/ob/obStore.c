@@ -250,3 +250,29 @@ obLookupObject(const CHAR *path, NT_OBJECT **result, USHORT flags)
     *result = curObject;
     return STATUS_SUCCESS;
 }
+
+NTSTATUS
+obAllocateDir(NT_OBJECT *dirObj)
+{
+    NT_OBJECTDIR *dir;
+
+    if (dirObj == NULL) {
+        return STATUS_INVALID_HANDLE;
+    }
+
+    /* Must be a directory we are allocing for */
+    if (dirObj->type != NT_OB_DIRECTORY) {
+        return STATUS_NOT_DIRECTORY;
+    }
+
+    dir = exAllocatePool(POOL_NON_PAGED, sizeof(NT_OBJECTDIR));
+    if (dir == NULL) {
+        return STATUS_NO_MEMORY;
+    }
+
+    /* Initialize the directory object */
+    dir->numEnt = 0;
+    TAILQ_INIT(&dir->dir);
+    dirObj->data = dir;
+    return STATUS_SUCCESS;
+}

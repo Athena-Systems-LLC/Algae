@@ -100,4 +100,17 @@ NTSTATUS obLookupObject(
     USHORT flags
 );
 
+/*
+ * Allocate an object directory to an object that
+ * is marked of type directory.
+ *
+ * When a directory object is created, its data field
+ * still needs to be initialized.
+ *
+ * @dirObj: Directory object to allocate for
+ */
+NTSTATUS obAllocateDir(
+    NT_OBJECT *dirObj
+);
+
 #endif  /* !_OB_OBJECT_H_ */
