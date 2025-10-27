@@ -6,8 +6,26 @@
  */
 
 #include <ke/types.h>
+#include <ke/timer.h>
 #include <hal/pio.h>
+#include <ob/object.h>
 #include <md/i8254.h>
+
+static BOOLEAN isInit = false;
+static NT_OBJECT *clkdev;
+static KTIMER timer;
+
+static USIZE
+ktimerGetCount(struct ktimer *tmr)
+{
+    return pitGetCount();
+}
+
+static void
+ktimerSetCount(struct ktimer *tmr, USIZE count)
+{
+    pitSetCount(count);
+}
 
 USHORT pitGetCount(void)
 {
@@ -38,3 +56,32 @@ pitSetFrequency(UQUAD frequencyHz)
 
     pitSetCount(divisor);
 }
+
+NTSTATUS
+pitInit(void)
+{
+    NT_OBJECT_CREATE create;
+    NTSTATUS status;
+
+    if (isInit) {
+        return STATUS_SUCCESS;
+    }
+
+    create.parent = "/clkdev";
+    create.name = "isa-aux";
+    create.type = NT_OB_TIMER;
+    status = obCreateObject(&create, &clkdev);
+
+    if (status != 0) {
+        return status;
+    }
+
+    clkdev->data = &timer;
+    isInit = true;
+    return status;
+}
+
+static KTIMER timer = {
+    .setCount = ktimerSetCount,
+    .getCount = ktimerGetCount
+};

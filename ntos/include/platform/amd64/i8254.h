@@ -9,6 +9,7 @@
 #define _MACHINE_I8254_H_ 1
 
 #include <ke/types.h>
+#include <ntstatus.h>
 
 #define I8254_COMMAND     0x43
 #define I8254_CHANNEL_0   0x40
@@ -31,5 +32,10 @@ void pitSetCount(USHORT count);
  * in Hz
  */
 void pitSetFrequency(UQUAD frequencyHz);
+
+/*
+ * Initialize the timer, called once on startup
+ */
+NTSTATUS pitInit(void);
 
 #endif  /* !_MACHINE_I8254_H_ */

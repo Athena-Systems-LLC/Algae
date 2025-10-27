@@ -6,6 +6,9 @@
  */
 
 #include <hal/timer.h>
+#include <md/i8254.h>
+#include <ex/trace.h>
+#include <ob/object.h>
 #include <ntstatus.h>
 
 /*
@@ -14,5 +17,16 @@
 NTSTATUS
 halInitTimers(void)
 {
+    NTSTATUS status;
+
+    /*
+     * Try to initialize the legacy i8254, if it fails we
+     * can probably be fine without it, just log the error.
+     */
+    status = pitInit();
+    if (status != STATUS_SUCCESS) {
+        exTrace(EX_TRACE_ERR, "halInitTimers: failed to register i8254\n");
+    }
+
     return STATUS_SUCCESS;
 }
