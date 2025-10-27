@@ -14,6 +14,7 @@
 #include <ke/mmio.h>
 #include <acpi/acpi.h>
 #include <acpi/tables.h>
+#include <md/tss.h>
 #include <md/lapic.h>
 #include <md/i8254.h>
 #include <md/cpuid.h>
@@ -282,6 +283,8 @@ lapicTimerInit(MCB *core)
 void
 kiLapicInit(void)
 {
+    TSS_STACK tmrStack;
+    NTSTATUS status;
     KPCR *kpcr = keGetCore();
     MCB *core = &kpcr->core;
 
@@ -298,4 +301,16 @@ kiLapicInit(void)
 
     /* Calibrate the built-in timer */
     core->lapicTmrFreq = lapicTimerInit(core);
+
+    /* Allocate a stack for the timer interrupts */
+    status = tssAllocateStack(&tmrStack);
+    if (status != STATUS_SUCCESS) {
+        keBugCheck("could not allocate sched timer stack\n");
+    }
+
+    /* Set the timer stack */
+    status = tssSetIntrStack(kpcr, IST_SCHED, &tmrStack);
+    if (status != STATUS_SUCCESS) {
+        keBugCheck("could not set sched timer stack\n");
+    }
 }
