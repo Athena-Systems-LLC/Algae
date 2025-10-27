@@ -23,6 +23,30 @@ typedef struct ktimer {
 } KTIMER;
 
 /*
+ * Get a pointer to a timer descriptor
+ *
+ * @path: Path of timer descriptor to get
+ * @result: Timer pointer written here
+ */
+NTSTATUS keTimerGetDescriptor(const CHAR *path, KTIMER **result);
+
+/*
+ * Get a timer's counter value
+ *
+ * @timer: Timer get count from
+ * @result: Result is written here
+ */
+NTSTATUS keTimerGetCount(KTIMER *timer, USIZE *result);
+
+/*
+ * Set a timer's counter value
+ *
+ * @timer: Timer to set count for
+ * @count: Count to write
+ */
+NTSTATUS keTimerSetCount(KTIMER *timer, USIZE count);
+
+/*
  * Internal routine to initialize system timers
  */
 NTSTATUS kiTimersInit(void);
