@@ -9,6 +9,7 @@
 #include <ke/kpcr.h>
 #include <ke/types.h>
 #include <ke/defs.h>
+#include <rtl/string.h>
 #include <md/lapic.h>
 #include <md/msr.h>
 #include <md/idt.h>
@@ -36,6 +37,22 @@ halRegisterIntr(void)
     kiIdtSetEntry(0xC, IDT_TRAP_GATE, ISR(ss_fault), 0);
     kiIdtSetEntry(0xD, IDT_TRAP_GATE, ISR(general_prot), 0);
     kiIdtSetEntry(0xE, IDT_TRAP_GATE, ISR(page_fault), 0);
+}
+
+static void
+cpuInitGdt(MCB *mcb)
+{
+    GDT_GDTR *gdtr;
+
+    if (mcb == NULL) {
+        return;
+    }
+
+    rtlMemcpy(mcb->gdt, g_gdtData, sizeof(g_gdtData));
+    gdtr = &mcb->gdtr;
+    gdtr->limit = sizeof(g_gdtData) - 1;
+    gdtr->offset = (ULONG_PTR)&mcb->gdt[0];
+    kiGdtLoad(gdtr);
 }
 
 void
@@ -68,9 +85,7 @@ keGetCore(void)
 void
 halCpuInit(void)
 {
-    gdtr.offset = (ULONG_PTR)&g_gdtData[0];
-    gdtr.limit = sizeof(g_gdtData) - 1;
-    kiGdtLoad(&gdtr);
+    cpuInitGdt(&bspKpcr.core);
 
     /* Enable interrupts */
     kiIdtLoad();
