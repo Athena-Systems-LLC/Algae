@@ -198,7 +198,7 @@ lapicReadId(MCB *core)
     /*
      * In x2APIC mode, the APIC ID is a 32-bit value
      */
-    return lapicRead(core, LAPIC_ID);
+    return lapicRead(core, LAPIC_ID);
 }
 
 /*
