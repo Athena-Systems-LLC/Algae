@@ -42,7 +42,7 @@ bugCheckDump(const char *fmt, va_list diag_ap)
         BODY_FG,
         BODY_BG,
         "A fatal error has occured and the system has been halted "
-        "to prevent damage to the machine"
+        "to prevent data loss or corruption"
     );
 
     /* Some bug reporting information */
