@@ -11,6 +11,21 @@
 #include <ke/types.h>
 #include <ke/defs.h>
 #include <ke/kpcr.h>
+#include <ntstatus.h>
+
+/* IST indices */
+#define IST_SCHED 0x00
+
+/*
+ * Represents an interrupt stack
+ */
+typedef union {
+    struct {
+        ULONG stackLow;
+        ULONG stackHigh;
+    };
+    UQUAD stackBase;
+} TSS_STACK;
 
 /*
  * Load the TSS
@@ -31,6 +46,25 @@ tssLoad(void)
         "ltr %ax"
     );
 }
+
+/*
+ * Allocate an interrupt stack
+ *
+ * @result: Result is written here
+ */
+NTSTATUS tssAllocateStack(TSS_STACK *result);
+
+/*
+ * Set a specific interrupt stack table entry
+ *
+ * @kpcr: Current processor control region
+ * @istNumber: Index into interrupt stack table
+ * @stack: Stack to set
+ */
+NTSTATUS tssSetIntrStack(
+    KPCR *kpcr, UCHAR istNumber,
+    TSS_STACK *stack
+);
 
 /*
  * Write to the TSS descriptor and point it to the
