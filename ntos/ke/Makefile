@@ -34,4 +34,4 @@ all: $(OBJECTS)
 
 .PHONY: clean
 clean:
-	rm -f $(OBJECTS)
+	rm -f $(OBJECTS) $(DEPS)
