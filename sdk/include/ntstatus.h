@@ -22,5 +22,6 @@ typedef ULONG NTSTATUS;
 #define STATUS_NOT_DIRECTORY    0xC0000039  /* Not a directory */
 #define STATUS_FILE_UNAVL       0xC0000467  /* File unavailable */
 #define STATUS_NOT_MAPPED       0xC0000019  /* View not mapped */
+#define STATUS_NOT_SUPPORTED    0xC00000BB  /* Operation not supported */
 
 #endif  /* !_SDK_NTSTATUS_H_ */
