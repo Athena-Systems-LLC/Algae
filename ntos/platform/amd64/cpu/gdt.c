@@ -7,7 +7,7 @@
 
 #include <md/gdt.h>
 
-struct gdtEntry g_gdtData[GDT_ENTRY_COUNT] = {
+GDT_ENTRY g_gdtData[GDT_ENTRY_COUNT] = {
     /* Null */
     {0},
 

@@ -19,7 +19,7 @@
 #define ISR(fn) (ULONG_PTR)fn
 
 static KPCR bspKpcr;
-static struct gdtr gdtr;
+static GDT_GDTR gdtr;
 
 static void
 halRegisterIntr(void)

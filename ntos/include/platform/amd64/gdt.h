@@ -50,27 +50,27 @@
 /*
  * Global descriptor table entry
  */
-struct gdtEntry {
+typedef struct gdtEntry {
     USHORT limit;
     USHORT baseLow;
     UCHAR  baseMid;
     USHORT attributes;
     UCHAR baseHi;
-} PACKED;
+} PACKED GDT_ENTRY;
 
 /*
  * Global descriptor table register
  */
-struct gdtr {
+typedef struct gdtr {
     USHORT limit;
     ULONG_PTR offset;
-} PACKED;
+} PACKED GDT_GDTR;
 
 /* Externs */
-extern struct gdtEntry g_gdtData[GDT_ENTRY_COUNT];
+extern GDT_ENTRY g_gdtData[GDT_ENTRY_COUNT];
 
 ALWAYS_INLINE static inline void
-kiGdtLoad(struct gdtr *gdtr)
+kiGdtLoad(GDT_GDTR *gdtr)
 {
     ASMV(
         "lgdt %0\n"
