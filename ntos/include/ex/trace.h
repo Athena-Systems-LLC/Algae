@@ -12,6 +12,7 @@
 #include <ke/types.h>
 
 #define EX_TRACE_INFO 0x0000
+#define EX_TRACE_ERR  0x0001
 
 /*
  * Trace line to system logs
