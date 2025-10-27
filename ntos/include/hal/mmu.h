@@ -11,6 +11,7 @@
 #include <ke/types.h>
 #include <mm/vm.h>
 #include <md/vas.h>     /* standard */
+#include <ntstatus.h>
 
 #define PAGE_READONLY       0x00
 #define PAGE_READWRITE      0x01
@@ -30,7 +31,7 @@
  * Returns zero on success, otherwise a less than
  * zero value on failure.
  */
-int mmuMapSingle(
+NTSTATUS mmuMapSingle(
     MMU_VAS *vas, ULONG_PTR vBase,
     ULONG_PTR pBase, USHORT mFlags
 );
@@ -45,7 +46,7 @@ int mmuMapSingle(
  * Returns zero on success, otherwise a less than
  * zero value on failure.
  */
-int mmuWriteVas(MMU_VAS *vas, USHORT flags);
+NTSTATUS mmuWriteVas(MMU_VAS *vas, USHORT flags);
 
 /*
  * Read the current virtual address space
@@ -55,6 +56,6 @@ int mmuWriteVas(MMU_VAS *vas, USHORT flags);
  * Returns zero on success, otherwise a less than
  * zero value on failure.
  */
-int mmuReadVas(MMU_VAS *res);
+NTSTATUS mmuReadVas(MMU_VAS *res);
 
 #endif  /* !_HAL_MMU_H_ */

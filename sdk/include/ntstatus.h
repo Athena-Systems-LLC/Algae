@@ -21,5 +21,6 @@ typedef ULONG NTSTATUS;
 #define STATUS_OBJECT_NOTFOUND  0xC0000034  /* Object name not found */
 #define STATUS_NOT_DIRECTORY    0xC0000039  /* Not a directory */
 #define STATUS_FILE_UNAVL       0xC0000467  /* File unavailable */
+#define STATUS_NOT_MAPPED       0xC0000019  /* View not mapped */
 
 #endif  /* !_SDK_NTSTATUS_H_ */

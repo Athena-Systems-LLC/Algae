@@ -153,7 +153,7 @@ mmuGetTableFlags(USHORT mapType)
     return pteFlags;
 }
 
-int
+NTSTATUS
 mmuWriteVas(MMU_VAS *vas, USHORT flags)
 {
     ASMV(
@@ -163,10 +163,10 @@ mmuWriteVas(MMU_VAS *vas, USHORT flags)
         : "memory"
     );
 
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-int
+NTSTATUS
 mmuReadVas(MMU_VAS *res)
 {
     ASMV(
@@ -176,10 +176,10 @@ mmuReadVas(MMU_VAS *res)
         : "memory"
     );
 
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-int
+NTSTATUS
 mmuMapSingle(MMU_VAS *vas, ULONG_PTR vBase, ULONG_PTR pBase, USHORT mFlags)
 {
     USHORT pteIdx;
@@ -188,7 +188,7 @@ mmuMapSingle(MMU_VAS *vas, ULONG_PTR vBase, ULONG_PTR pBase, USHORT mFlags)
     QUAD mapFlags;
 
     if (vas == NULL) {
-        return -1;
+        return STATUS_INVALID_HANDLE;
     }
 
     /* Align bases down and grab the page table */
@@ -202,7 +202,7 @@ mmuMapSingle(MMU_VAS *vas, ULONG_PTR vBase, ULONG_PTR pBase, USHORT mFlags)
     );
 
     if (ptePhys == 0) {
-        return -1;
+        return STATUS_NOT_MAPPED;
     }
 
     pte = PHYS_TO_VIRT(ptePhys);
@@ -215,5 +215,5 @@ mmuMapSingle(MMU_VAS *vas, ULONG_PTR vBase, ULONG_PTR pBase, USHORT mFlags)
      */
     pte[pteIdx] = (pBase | mapFlags);
     mmuTlbFlush(vBase);
-    return 0;
+    return STATUS_SUCCESS;
 }
