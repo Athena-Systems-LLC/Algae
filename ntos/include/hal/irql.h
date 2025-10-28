@@ -15,9 +15,9 @@
 #define PASSIVE_LEVEL   0x1
 #define DISPATCH_LEVEL  0x2
 #define CLOCK_LEVEL     0x3
-#define IPI_LEVEL       0x5
-#define POWER_LEVEL     0x6
-#define HIGH_LEVEL      0x7
+#define IPI_LEVEL       0xD
+#define POWER_LEVEL     0xE
+#define HIGH_LEVEL      0xF
 
 /*
  * Get the current interrupt request level
