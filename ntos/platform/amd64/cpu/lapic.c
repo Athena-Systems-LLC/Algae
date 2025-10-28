@@ -10,6 +10,7 @@
 #include <ke/defs.h>
 #include <ke/bugCheck.h>
 #include <ke/assert.h>
+#include <ke/kpcr.h>
 #include <ex/trace.h>
 #include <ke/mmio.h>
 #include <acpi/acpi.h>
@@ -44,6 +45,7 @@
 #define LAPIC_CUR_CNT       0x0390U     /* Current Count Register (for timer) */
 
 #define LAPIC_TMR_SAMPLES 0xFFFF
+#define X2APIC_IPI_SELF 0x3F0
 
 /*
  * The x2APIC register space is accessed via
@@ -278,6 +280,54 @@ lapicTimerInit(MCB *core)
     frequency = (LAPIC_TMR_SAMPLES / ticksTotal) * I8254_DIVIDEND;
     lapicStopTimer(core);
     return frequency;
+}
+
+NTSTATUS
+kiLapicSendIpi(const LAPIC_IPI *ipi)
+{
+    KPCR *kpcr = keGetCore();
+    MCB *mcb;
+    ULONG icrLo = 0, icrHi = 0;
+
+    if (kpcr == NULL) {
+        keBugCheck("could not get current core\n");
+    }
+
+    mcb = &kpcr->core;
+
+    /* Use optimized self shorthand if x2APIC */
+    if (ipi->shand == IPI_SHAND_SELF && mcb->hasX2Apic) {
+        lapicWrite(mcb, X2APIC_IPI_SELF, ipi->vector);
+        return STATUS_SUCCESS;
+    }
+
+    /* Encode the low dword */
+    icrLo |= ipi->vector;
+    icrLo |= (ipi->delmod & 0x7) << 8;
+    icrLo |= (ipi->destMode & 0x1) << 11;
+    icrLo |= (ipi->shand & 0x3) << 18;
+
+    /* Polling is redundant on x2APIC as it queues */
+    if (mcb->hasX2Apic) {
+        lapicWrite(
+            mcb,
+            LAPIC_ICRLO,
+            ((UQUAD)ipi->apicId) << 32 | icrLo
+        );
+
+        return STATUS_SUCCESS;
+    }
+
+    /* Send that IPI */
+    lapicWrite(mcb, LAPIC_ICRHI, ((ULONG)ipi->apicId << 24));
+    lapicWrite(mcb, LAPIC_ICRLO, icrLo);
+
+    /* Manual serialization is required on xAPIC */
+    do {
+        icrLo = lapicRead(mcb, LAPIC_ICRLO);
+        ASMV("pause");
+    } while (ISSET(icrLo, BIT(12)));
+    return STATUS_SUCCESS;
 }
 
 void
