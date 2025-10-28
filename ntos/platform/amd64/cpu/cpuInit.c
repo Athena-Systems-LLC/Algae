@@ -9,6 +9,7 @@
 #include <ke/kpcr.h>
 #include <ke/types.h>
 #include <ke/defs.h>
+#include <hal/irql.h>
 #include <rtl/string.h>
 #include <md/tss.h>
 #include <md/lapic.h>
@@ -115,4 +116,7 @@ halCpuInit(void)
 
     /* Enable the Local APIC unit */
     kiLapicInit();
+
+    /* Put ourselves at the passive level */
+    halSetIrql(PASSIVE_LEVEL);
 }
