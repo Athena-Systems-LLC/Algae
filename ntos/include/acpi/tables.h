@@ -90,4 +90,18 @@ typedef struct PACKED {
     UQUAD address;
 } ACPI_GAS;
 
+typedef struct PACKED {
+    ACPI_HEADER hdr;
+    UCHAR hwRevId;
+    UCHAR comparatorCount : 5;
+    UCHAR counterSize     : 1;
+    UCHAR reserved        : 1;
+    UCHAR legacyRepl      : 1;
+    USHORT pciVendorId;
+    ACPI_GAS gas;
+    UCHAR hpetNumber;
+    SHORT minimumTick;
+    UCHAR pageProtection;
+} ACPI_HPET;
+
 #endif  /* !_ACPI_TABLES_H_ */
