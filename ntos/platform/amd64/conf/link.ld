@@ -36,6 +36,10 @@ SECTIONS
         __modules_init_end = .;
     } :rodata
 
+    .trampoline : {
+        *(.trampoline .trampoline.*)
+    } :rodata
+
     . += CONSTANT(MAXPAGESIZE);
 
     .data : {

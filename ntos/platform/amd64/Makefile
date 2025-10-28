@@ -3,7 +3,7 @@ include ../../data/sys.mk
 SDKDIR =
 OBJ = $(shell find ../../ -name "*.o")
 
-ASMFILES = $(shell find . -name "*.S")
+ASMFILES = $(shell find . -name "*.S" | grep -v "boot")
 ASMOBJ = $(ASMFILES:.S=.S.o)
 
 CFILES = $(shell find . -name "*.c")
@@ -19,11 +19,16 @@ CC =
 LD = lld.ld
 
 .PHONY: all
-all: $(ASMOBJ) $(COBJ)
+all: boot $(ASMOBJ) $(COBJ)
 	ld $(LD_FLAGS) $(OBJ) -o $(KERNEL_OUTPUT)
 	../../../tools/ksyms ../../ke/ksyms.c $(KERNEL_OUTPUT)
 	$(CC) -c $(CFLAGS) ../../ke/ksyms.c -o ../../ke/ksyms.o
 	ld $(LD_FLAGS) $(OBJ) -o $(KERNEL_OUTPUT)
+	objcopy --update-section .trampoline=boot/cpuStartup.bin $(KERNEL_OUTPUT)
+
+.PHONY: boot
+boot:
+	nasm -fbin boot/cpuStartup.asm -o boot/cpuStartup.bin
 
 %.S.o: %.S
 	$(CC) -c $(CFLAGS) $< -o $@

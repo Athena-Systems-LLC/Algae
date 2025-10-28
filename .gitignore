@@ -2,6 +2,7 @@
 *.o
 *.d
 *.iso
+*.bin
 /cc
 /ntos/shim/
 /ntos/ke/ksyms.c
