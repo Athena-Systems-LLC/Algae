@@ -49,7 +49,7 @@ halGetIrql(void)
     ULONG cr8;
 
     cr8 = readCr8();
-    return (cr8 >> 4) & 0xF;
+    return cr8 & 0xF;
 }
 
 void
@@ -58,7 +58,7 @@ halSetIrql(ULONG irql)
     ULONG cr8;
 
     cr8 = readCr8();
-    cr8 &= ~(0xF << 4);
-    cr8 |= irql;
+    cr8 &= ~0xF;
+    cr8 |= irql & 0xF;
     writeCr8(cr8);
 }
