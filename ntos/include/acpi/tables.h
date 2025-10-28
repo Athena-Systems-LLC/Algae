@@ -82,4 +82,12 @@ typedef struct PACKED {
     USHORT flags;
 } INTERRUPT_OVERRIDE;
 
+typedef struct PACKED {
+    UCHAR addrSpaceId;
+    UCHAR regBitWidth;
+    UCHAR regBitOffset;
+    UCHAR reserved;
+    UQUAD address;
+} ACPI_GAS;
+
 #endif  /* !_ACPI_TABLES_H_ */
