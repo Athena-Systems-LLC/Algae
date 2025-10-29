@@ -65,7 +65,7 @@ longModeEntry:
     mov gs, ax
     mov ss, ax
 
-    mov rsp, 0x3000                         ;; Use 0x3000 as temp stack
+    mov rsp, 0x4000                         ;; Use 0x4000 as temp stack
     xor rbp, rbp                            ;; Terminate callstack
 
     mov rax, qword [BOOTSTRAP_DESC]
