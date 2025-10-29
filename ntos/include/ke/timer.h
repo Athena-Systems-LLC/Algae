@@ -18,6 +18,7 @@
 typedef struct ktimer {
     NTSTATUS(*msleep)(struct ktimer *self, USIZE msec);
     NTSTATUS(*usleep)(struct ktimer *self, USIZE usec);
+    void(*oneshotUsec)(struct ktimer *self, USIZE usec);
     USIZE(*getCount)(struct ktimer *self);
     void(*setCount)(struct ktimer *self, USIZE count);
 } KTIMER;
@@ -37,6 +38,14 @@ NTSTATUS keTimerGetDescriptor(const CHAR *path, KTIMER **result);
  * @n: Number of msecs
  */
 NTSTATUS keTimerMsleep(KTIMER *timer, USIZE n);
+
+/*
+ * Fire an interrupt after n microseconds
+ *
+ * @timer: Timer to start counter for
+ * @n: Number of microseconds
+ */
+NTSTATUS keTimerOneshotUsec(KTIMER *timer, USIZE n);
 
 /*
  * Get a timer's counter value
