@@ -74,6 +74,21 @@ keTimerSetCount(KTIMER *timer, USIZE count)
     return STATUS_SUCCESS;
 }
 
+NTSTATUS
+keTimerMsleep(KTIMER *timer, USIZE n)
+{
+    if (timer == NULL) {
+        return STATUS_INVALID_HANDLE;
+    }
+
+    if (timer->msleep == NULL) {
+        return STATUS_NOT_SUPPORTED;
+    }
+
+    timer->msleep(timer, n);
+    return STATUS_SUCCESS;
+}
+
 /*
  * Create an object directory for timers to
  * be stored, this is called once during startup

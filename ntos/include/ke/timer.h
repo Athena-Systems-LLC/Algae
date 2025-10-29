@@ -31,6 +31,14 @@ typedef struct ktimer {
 NTSTATUS keTimerGetDescriptor(const CHAR *path, KTIMER **result);
 
 /*
+ * Sleep for n miliseconds
+ *
+ * @ktimer: Timer to handle the sleep
+ * @n: Number of msecs
+ */
+NTSTATUS keTimerMsleep(KTIMER *timer, USIZE n);
+
+/*
  * Get a timer's counter value
  *
  * @timer: Timer get count from
