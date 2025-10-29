@@ -8,6 +8,7 @@
 #include <ke/boot.h>
 #include <ke/timer.h>
 #include <ke/kpcr.h>
+#include <md/mp.h>      /* shared */
 #include <ex/pool.h>
 #include <ob/objectStore.h>
 
@@ -22,5 +23,6 @@ kMain(void)
     kiPoolInit();
     kiObjStoreInit();
     kiTimersInit();
+    kiMpInit();
     for (;;);
 }

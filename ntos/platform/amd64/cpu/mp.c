@@ -11,7 +11,10 @@
 #include <ke/timer.h>
 #include <ke/bugCheck.h>
 #include <ke/assert.h>
+#include <ke/spinlock.h>
+#include <ke/boot.h>
 #include <ex/trace.h>
+#include <ex/pool.h>
 #include <ke/boot.h>
 #include <md/lapic.h>
 #include <md/mcb.h>
@@ -29,8 +32,10 @@ static UCHAR trampolineData[4096];
 extern ULONG_PTR __trampoline_start;
 extern UCHAR __trampoline_end;
 
+static KSPIN_LOCK apLock;
 static KTIMER *timer;
 static UCHAR *trampoline;
+static USIZE nAp = 0;
 
 /*
  * A bootstrap descriptor contains information needed
@@ -50,6 +55,17 @@ typedef struct {
 static void
 mpApEntry(void)
 {
+    KPCR *kpcr;
+
+    keAcquireSpinLock(&apLock);
+    ++nAp;
+
+    kpcr = exAllocatePool(POOL_NON_PAGED, sizeof(KPCR));
+    ASSERT(kpcr != NULL);
+
+    kiProcessorInit(kpcr);
+    keReleaseSpinLock(&apLock);
+
     for (;;) {
         ASMV("pause");
     }
@@ -148,4 +164,6 @@ kiMpInit(void)
         localApicLookup,
         mcb->hwId
     );
+
+    exTrace(EX_TRACE_INFO, "bootstrapped %d cores\n", nAp);
 }
