@@ -9,8 +9,36 @@
 #define _HAL_KPCR_H_ 1
 
 #include <ke/types.h>
+#include <ke/sched.h>
+#include <ke/defs.h>
+#include <ke/spinlock.h>
 #include <hal/kpcr.h>
 #include <md/mcb.h>     /* standard */
+#include <ntstatus.h>
+
+/*
+ * Possible ways kernel processor arbitration can
+ * can acomplished, in other words, the various possible
+ * modes the arbiter can be in.
+ */
+typedef enum {
+    KPARB_ROUND_ROBIN
+} KPARB_METHOD;
+
+/*
+ * The kernel processor arbiter decides which
+ * processors are to be selected next for a
+ * particular operation e.g., process scheduling
+ *
+ * @method: Arbitration mode
+ * @semaphore: Used for tracking cores
+ * @lock: Protects the fields of this structure
+ */
+typedef struct {
+    KPARB_METHOD method;
+    USHORT semaphore;
+    KSPIN_LOCK lock;
+} KPARB;
 
 /*
  * The kernel processor control region is standard between
@@ -47,5 +75,22 @@ KPCR *keCpuGet(USIZE index);
  * system
  */
 USIZE keCpuCount(void);
+
+/*
+ * Initialize a processor arbiter
+ *
+ * @mode: Mode to initialize in
+ * @result: Result is written here
+ */
+NTSTATUS keParbReset(KPARB_METHOD mode, KPARB *result);
+
+/*
+ * Cycles the arbiter depending on its mode
+ *
+ * @arbiter: Arbiter to cycle
+ *
+ * Returns the current processor selected
+ */
+KPCR *keParbCycle(KPARB *arbiter);
 
 #endif  /* !_HAL_KPCR_H_ */
