@@ -11,6 +11,8 @@
 #include <ke/types.h>
 #include <ntstatus.h>
 
+#define LAPIC_TMR_VEC 0x81
+
 /*
  * Destination shorthand
  *
@@ -61,6 +63,12 @@ typedef struct {
  * to another Local APIC on the machine
  */
 NTSTATUS kiLapicSendIpi(const LAPIC_IPI *ipi);
+
+/*
+ * Internal routine to initialize the Local APIC
+ * timer
+ */
+void kiLapicInitTimer(void);
 
 /*
  * Internal routine used to initialize the

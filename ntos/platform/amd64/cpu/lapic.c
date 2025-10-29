@@ -8,9 +8,11 @@
 #include <ke/types.h>
 #include <ke/kpcr.h>
 #include <ke/defs.h>
+#include <ke/timer.h>
 #include <ke/bugCheck.h>
 #include <ke/assert.h>
 #include <ke/kpcr.h>
+#include <ob/object.h>
 #include <ex/trace.h>
 #include <ke/mmio.h>
 #include <acpi/acpi.h>
@@ -77,6 +79,9 @@
 
 /* MMIO base address (relocatable) */
 #define LAPIC_MMIO_BASE 0xFEE00000
+
+static KTIMER ktimer;
+static NT_OBJECT *clkdev;
 
 /*
  * Section 10.4.2 of the Intel SDM states that the
@@ -256,6 +261,17 @@ lapicStopTimer(MCB *core)
     lapicWrite(core, LAPIC_INIT_CNT, 0);
 }
 
+static void
+lapicTimerStart(MCB *core, BOOLEAN mask, UCHAR mode, ULONG count)
+{
+    ULONG tmp;
+
+    tmp = (mode << 17) | (mask << 16) | LAPIC_TMR_VEC;
+    lapicWrite(core, LAPIC_LVT_TMR, tmp);
+    lapicWrite(core, LAPIC_DCR, 0x00);
+    lapicWrite(core, LAPIC_INIT_CNT, count);
+}
+
 /*
  * Initialize the Local APIC timer
  */
@@ -280,6 +296,65 @@ lapicTimerInit(MCB *core)
     frequency = (LAPIC_TMR_SAMPLES / ticksTotal) * I8254_DIVIDEND;
     lapicStopTimer(core);
     return frequency;
+}
+
+/*
+ * Start Local APIC timer oneshot with number
+ * of ticks to count down from.
+ *
+ * @mask: If `true', timer will be masked, `count' should be 0.
+ * @count: Number of ticks.
+ */
+static void
+lapicTimerOneshot(MCB *core, BOOLEAN mask, USIZE count)
+{
+    USIZE ticksStart, ticksEnd;
+    USIZE ticksTotal, frequency;
+
+    lapicTimerStart(core, mask, LVT_TMR_ONESHOT, count);
+}
+
+/*
+ * Perform a timer oneshot using microsecond units
+ */
+static void
+lapicTimerOneshotUsec(struct ktimer *ktimer, USIZE usec)
+{
+    USIZE ticks;
+    KPCR *kpcr;
+    MCB *mcb;
+
+    kpcr = keGetCore();
+    if (kpcr == NULL) {
+        keBugCheck("could not get current core\n");
+    }
+
+    mcb = &kpcr->core;
+    ticks = usec * (mcb->lapicTmrFreq / 1000000);
+    lapicTimerOneshot(mcb, false, ticks);
+}
+
+void
+kiLapicInitTimer(void)
+{
+    static BOOLEAN isInit = false;
+    NTSTATUS status;
+    NT_OBJECT_CREATE args;
+
+    if (isInit) {
+        return;
+    }
+
+    args.parent = "/clkdev";
+    args.name = "sched";
+    args.type = NT_OB_TIMER;
+    status = obCreateObject(&args, &clkdev);
+    if (status != STATUS_SUCCESS) {
+        keBugCheck("could not register sched timer\n");
+    }
+
+    clkdev->data = &ktimer;
+    isInit = true;
 }
 
 NTSTATUS
@@ -364,3 +439,7 @@ kiLapicInit(void)
         keBugCheck("could not set sched timer stack\n");
     }
 }
+
+static KTIMER ktimer = {
+    .oneshotUsec = lapicTimerOneshotUsec
+};

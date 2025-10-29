@@ -22,6 +22,7 @@
 #define ISR(fn) (ULONG_PTR)fn
 
 static GDT_GDTR gdtr;
+extern void lapic_tmr_isr(void);
 
 static void
 halRegisterIntr(void)
@@ -38,6 +39,7 @@ halRegisterIntr(void)
     kiIdtSetEntry(0xC, IDT_TRAP_GATE, ISR(ss_fault), 0);
     kiIdtSetEntry(0xD, IDT_TRAP_GATE, ISR(general_prot), 0);
     kiIdtSetEntry(0xE, IDT_TRAP_GATE, ISR(page_fault), 0);
+    kiIdtSetEntry(LAPIC_TMR_VEC, IDT_INT_GATE, ISR(lapic_tmr_isr), 0);
 }
 
 static void

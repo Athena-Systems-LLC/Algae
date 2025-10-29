@@ -64,6 +64,7 @@ mpApEntry(void)
     ASSERT(kpcr != NULL);
 
     kiProcessorInit(kpcr);
+    kiLapicInitTimer();
     keReleaseSpinLock(&apLock);
 
     for (;;) {
