@@ -14,7 +14,7 @@
 NTSTATUS
 keScheduleProc(SCHED_QUEUE *queue, PROCESS *process)
 {
-    if (queue == NULL || process) {
+    if (queue == NULL || process == NULL) {
         return STATUS_INVALID_HANDLE;
     }
 
