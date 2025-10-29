@@ -21,7 +21,9 @@
 #include <rtl/string.h>
 #include <acpi/acpi.h>
 #include <hal/mmu.h>
+#include <hal/kpcr.h>
 
+#define AP_MAX 256
 #define TRAMPOLINE_PBASE 0x1000
 #define BOOTSTRAP_DESC_BASE 0x2000
 #define TRAMPOLINE_LEN (__trampoline_end - __trampoline_start)
@@ -32,6 +34,8 @@ static UCHAR trampolineData[4096];
 extern ULONG_PTR __trampoline_start;
 extern UCHAR __trampoline_end;
 
+static KPCR *bspKpcr;
+static KPCR *apList[AP_MAX];
 static KSPIN_LOCK apLock;
 static KTIMER *timer;
 static UCHAR *trampoline;
@@ -58,10 +62,12 @@ mpApEntry(void)
     KPCR *kpcr;
 
     keAcquireSpinLock(&apLock);
-    ++nAp;
 
     kpcr = exAllocatePool(POOL_NON_PAGED, sizeof(KPCR));
     ASSERT(kpcr != NULL);
+
+    apList[nAp++] = kpcr;
+    ASSERT(nAp < AP_MAX);
 
     kiProcessorInit(kpcr);
     kiLapicInitTimer();
@@ -131,6 +137,28 @@ localApicLookup(APIC_HEADER *hdr, USIZE arg)
     return -1;
 }
 
+USIZE
+halCpuCount(void)
+{
+    return nAp + 1;
+}
+
+NTSTATUS
+halCpuGet(USHORT cpuIdx, struct kpcr **result)
+{
+    if (result == NULL) {
+        return STATUS_INVALID_HANDLE;
+    }
+
+    if (cpuIdx == 0) {
+        *result = bspKpcr;
+        return STATUS_SUCCESS;
+    }
+
+    *result = apList[cpuIdx - 1];
+    return STATUS_SUCCESS;
+}
+
 void
 kiMpInit(void)
 {
@@ -142,6 +170,8 @@ kiMpInit(void)
 
     core = keGetCore();
     ASSERT(core != NULL);
+
+    bspKpcr = core;
     mcb = &core->core;
 
     /* Copy the trampoline data */

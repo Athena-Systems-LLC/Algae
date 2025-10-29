@@ -9,6 +9,7 @@
 #define _HAL_KPCR_H_ 1
 
 #include <ke/types.h>
+#include <hal/kpcr.h>
 #include <md/mcb.h>     /* standard */
 
 /*
@@ -33,5 +34,18 @@ typedef struct kpcr {
  *      its a really general function.
  */
 KPCR *keGetCore(void);
+
+/*
+ * Get a KPCR by index
+ *
+ * @index: Index to select
+ */
+KPCR *keCpuGet(USIZE index);
+
+/*
+ * Get the number of processors on the
+ * system
+ */
+USIZE keCpuCount(void);
 
 #endif  /* !_HAL_KPCR_H_ */
