@@ -7,6 +7,7 @@
 
 #include <hal/timer.h>
 #include <md/i8254.h>
+#include <md/io/hpet.h>
 #include <ex/trace.h>
 #include <ob/object.h>
 #include <ntstatus.h>
@@ -28,5 +29,6 @@ halInitTimers(void)
         exTrace(EX_TRACE_ERR, "halInitTimers: failed to register i8254\n");
     }
 
+    kiHpetInit();
     return STATUS_SUCCESS;
 }
