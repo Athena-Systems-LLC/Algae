@@ -12,6 +12,7 @@
 #include <ke/bugCheck.h>
 #include <ke/assert.h>
 #include <ex/trace.h>
+#include <ke/boot.h>
 #include <md/lapic.h>
 #include <md/mcb.h>
 #include <rtl/string.h>
@@ -19,6 +20,7 @@
 #include <hal/mmu.h>
 
 #define TRAMPOLINE_PBASE 0x1000
+#define BOOTSTRAP_DESC_BASE 0x2000
 #define TRAMPOLINE_LEN (__trampoline_end - __trampoline_start)
 
 SECTION(".trampoline")
@@ -31,6 +33,29 @@ static KTIMER *timer;
 static UCHAR *trampoline;
 
 /*
+ * A bootstrap descriptor contains information needed
+ * by the application processor to transition into
+ * long mode.
+ *
+ * @pml4Pa: Physical address that will end up in CR3
+ * @entryPa: Entry physical address for AP
+ *
+ * XXX: DO NOT REORDER - CALLED IN ASSEMBLY
+ */
+typedef struct {
+    ULONG_PTR pml4Pa;
+    ULONG_PTR entryPa;
+} AP_BOOTSTRAP;
+
+static void
+mpApEntry(void)
+{
+    for (;;) {
+        ASMV("pause");
+    }
+}
+
+/*
  * This function gets called per Local APIC as a callback
  * and initializes the application processors
  */
@@ -40,6 +65,8 @@ localApicLookup(APIC_HEADER *hdr, USIZE arg)
     LAPIC_IPI ipi;
     LOCAL_APIC *lapic = (LOCAL_APIC *)hdr;
     NTSTATUS status;
+    AP_BOOTSTRAP *bootstrap;
+    MMU_VAS vas;
 
     /*
      * The argument passed to us is the callers
@@ -50,6 +77,12 @@ localApicLookup(APIC_HEADER *hdr, USIZE arg)
         exTrace(EX_TRACE_INFO, "skip APIC %d\n", arg);
         return -1;
     }
+
+    /* Initialize the bootstrap descriptor */
+    mmuReadVas(&vas);
+    bootstrap = PHYS_TO_VIRT(BOOTSTRAP_DESC_BASE);
+    bootstrap->pml4Pa = vas.cr3;
+    bootstrap->entryPa = (ULONG_PTR)mpApEntry;
 
     ipi.delmod = IPI_DELMOD_INIT;
     ipi.shand = IPI_SHAND_NONE;
@@ -74,7 +107,7 @@ localApicLookup(APIC_HEADER *hdr, USIZE arg)
             keBugCheck("could not send STARTUP IPI (apic=%d)\n", ipi.apicId);
         }
 
-        keTimerMsleep(timer, 1);
+        keTimerMsleep(timer, 5);
     }
 
     /* Return -1 to keep getting values */
