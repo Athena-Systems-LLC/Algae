@@ -28,4 +28,12 @@ typedef struct {
  */
 NTSTATUS keScheduleProc(SCHED_QUEUE *queue, PROCESS *process);
 
+/*
+ * Dequeue a process from a scheduler queue
+ *
+ * @queue: Queue to dequeue from
+ * @result: Result is written here
+ */
+NTSTATUS keDequeueProc(SCHED_QUEUE *queue, PROCESS **result);
+
 #endif  /* !_KE_SCHED_H_ */

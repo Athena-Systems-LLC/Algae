@@ -24,5 +24,6 @@ typedef ULONG NTSTATUS;
 #define STATUS_NOT_MAPPED       0xC0000019  /* View not mapped */
 #define STATUS_NOT_SUPPORTED    0xC00000BB  /* Operation not supported */
 #define STATUS_INVALID_PARAM    0xC00000EF  /* Invalid parameter */
+#define STATUS_PROC_NOTFOUND    0x000000F0  /* Process not found */
 
 #endif  /* !_SDK_NTSTATUS_H_ */

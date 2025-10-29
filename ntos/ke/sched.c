@@ -23,3 +23,25 @@ keScheduleProc(SCHED_QUEUE *queue, PROCESS *process)
     keReleaseSpinLock(&queue->lock);
     return STATUS_SUCCESS;
 }
+
+NTSTATUS
+keDequeueProc(SCHED_QUEUE *queue, PROCESS **result)
+{
+    PROCESS *process;
+
+    if (queue == NULL || process == NULL) {
+        return STATUS_INVALID_HANDLE;
+    }
+
+    keAcquireSpinLock(&queue->lock);
+    process = TAILQ_FIRST(&queue->q);
+    if (process == NULL) {
+        keReleaseSpinLock(&queue->lock);
+        return STATUS_PROC_NOTFOUND;
+    }
+
+    TAILQ_REMOVE(&queue->q, process, link);
+    keReleaseSpinLock(&queue->lock);
+    *result = process;
+    return STATUS_SUCCESS;
+}
