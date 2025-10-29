@@ -13,6 +13,7 @@
 #include <md/gdt.h>
 #include <md/tssVar.h>
 
+#define CACHELINE_SIZE 64
 #define MD_SPINWAIT() \
     ASMV("rep; nop")
 
