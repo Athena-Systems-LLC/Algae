@@ -21,7 +21,6 @@
 
 #define ISR(fn) (ULONG_PTR)fn
 
-static KPCR bspKpcr;
 static GDT_GDTR gdtr;
 
 static void
@@ -99,20 +98,20 @@ keGetCore(void)
 }
 
 void
-halCpuInit(void)
+halCpuInit(KPCR *kpcr)
 {
-    cpuInitGdt(&bspKpcr.core);
+    cpuInitGdt(&kpcr->core);
 
     /* Enable interrupts */
     kiIdtLoad();
     halRegisterIntr();
 
     /* Load the TSS */
-    cpuInitTss(&bspKpcr);
+    cpuInitTss(kpcr);
 
     /* Set the current processor */
-    bspKpcr.self = &bspKpcr;
-    wrmsr(IA32_GS_BASE, (ULONG_PTR)&bspKpcr);
+    kpcr->self = kpcr;
+    wrmsr(IA32_GS_BASE, (ULONG_PTR)kpcr);
 
     /* Enable the Local APIC unit */
     kiLapicInit();

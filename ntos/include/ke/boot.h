@@ -8,8 +8,10 @@
 #ifndef _KE_BOOT_H_
 #define _KE_BOOT_H_ 1
 
+#include <ke/kpcr.h>
+
 int kiPlatformInit(void);
-int kiProcessorInit(void);
+int kiProcessorInit(KPCR *core);
 void kiBootScreen(void);
 
 #endif  /* !_KE_BOOT_H_ */

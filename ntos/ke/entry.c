@@ -7,14 +7,17 @@
 
 #include <ke/boot.h>
 #include <ke/timer.h>
+#include <ke/kpcr.h>
 #include <ex/pool.h>
 #include <ob/objectStore.h>
+
+static KPCR kpcrBsp;
 
 void
 kMain(void)
 {
     kiPlatformInit();
-    kiProcessorInit();
+    kiProcessorInit(&kpcrBsp);
     kiBootScreen();
     kiPoolInit();
     kiObjStoreInit();

@@ -14,7 +14,7 @@ typedef enum {
     CPU_HALT_SELF,  /* Halt current core */
 } CPU_HALT_MODE;
 
-void halCpuInit(void);
+void halCpuInit(KPCR *kpcr);
 
 /*
  * Halt the CPU with a specific mode

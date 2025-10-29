@@ -23,8 +23,8 @@ kiPlatformInit(void)
 }
 
 int
-kiProcessorInit(void)
+kiProcessorInit(KPCR *kpcr)
 {
-    halCpuInit();
+    halCpuInit(kpcr);
     return 0;
 }
