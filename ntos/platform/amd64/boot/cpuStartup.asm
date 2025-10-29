@@ -6,8 +6,11 @@
 ;;
 
 [bits 16]
-[org 0x0000]
+[org 0x1000]
 
 start:
     cli
     hlt
+    jmp start
+
+times 4096 - ($-$$) db 0

@@ -37,7 +37,7 @@ SECTIONS
     } :rodata
 
     .trampoline : {
-        *(.trampoline .trampoline.*)
+        KEEP(*(.trampoline .trampoline.*))
     } :rodata
 
     . += CONSTANT(MAXPAGESIZE);

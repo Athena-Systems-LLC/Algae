@@ -7,7 +7,7 @@
 
 ARCH = amd64
 ISO_DEST = algae.iso
-QEMU_FLAGS = -cdrom $(ISO_DEST) --enable-kvm -serial stdio
+QEMU_FLAGS = -cdrom $(ISO_DEST) --enable-kvm -serial stdio -smp 4
 SHIMDIR = ntos/shim/limine/
 SDKDIR = $(shell pwd)/sdk
 CC := clang
