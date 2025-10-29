@@ -10,6 +10,7 @@
 
 #include <ke/types.h>
 #include <md/pcb.h>     /* shared */
+#include <rtl/queue.h>
 #include <ntstatus.h>
 
 #define PROCESS_UNAMED "unamed"
@@ -24,11 +25,13 @@ typedef ULONG PID;
  * @pid: Process ID to identify process
  * @name: Name of the process
  * @pcb: Process control block
+ * @link: Scheduler queue link
  */
-typedef struct {
+typedef struct process {
     PID pid;
     CHAR name[PROCESS_NAMELEN];
     PCB pcb;
+    TAILQ_ENTRY(process) link;
 } PROCESS;
 
 /*

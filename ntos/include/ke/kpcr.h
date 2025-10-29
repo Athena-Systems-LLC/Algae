@@ -47,10 +47,12 @@ typedef struct {
  *
  * @vId: Virtual / logical ID (assigned by the kernel)
  * @core: MD information
+ * @queue: Process queue
  */
 typedef struct kpcr {
     USHORT vId;
     MCB core;
+    SCHED_QUEUE queue;
     struct kpcr *self;
 } KPCR;
 
