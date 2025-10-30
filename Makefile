@@ -10,6 +10,7 @@ ISO_DEST = algae.iso
 QEMU_FLAGS = -cdrom $(ISO_DEST) --enable-kvm -serial stdio -smp 4
 SHIMDIR = ntos/shim/limine/
 SDKDIR = $(shell pwd)/sdk
+OMAR = tools/omar/bin/omar
 CC := clang
 LD := ld
 
@@ -22,6 +23,7 @@ iso:
 	cp ntos/data/boot/limine.conf $(SHIMDIR)/limine-bios.sys \
         $(SHIMDIR)/limine-bios-cd.bin $(SHIMDIR)/limine-uefi-cd.bin iso_root/
 	cp ntos/data/boot/*.sys iso_root/boot/
+	$(OMAR) -i base -o iso_root/boot/bootpack.omar
 	xorriso -as mkisofs -b limine-bios-cd.bin -no-emul-boot -boot-load-size 4\
 		-boot-info-table --efi-boot limine-uefi-cd.bin -efi-boot-part \
 		--efi-boot-image --protective-msdos-label iso_root/ -o $(ISO_DEST) 1>/dev/null

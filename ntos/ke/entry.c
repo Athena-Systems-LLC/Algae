@@ -9,6 +9,7 @@
 #include <ke/timer.h>
 #include <ke/kpcr.h>
 #include <ke/sched.h>
+#include <ke/bootPack.h>
 #include <md/mp.h>      /* shared */
 #include <ex/pool.h>
 #include <ob/objectStore.h>
@@ -26,5 +27,6 @@ kMain(void)
     kiTimersInit();
     kiSchedInit();
     kiMpInit();
+    kiBootPackInit();
     for (;;);
 }
