@@ -8,12 +8,14 @@
 #include <ke/bugCheck.h>
 #include <ke/vaargs.h>
 #include <ke/bootParam.h>
+#include <ke/spinlock.h>
 #include <ke/kpcr.h>
 #include <rtl/string.h>
 #include <drv/bootVid.h>
 #include <hal/cpu.h>
 #include <hal/bugCheck.h>
 
+static KSPIN_LOCK lock;
 static struct bootParams params;
 static struct fbParams *fbParams;
 static ULONG curLogLine = 4;
@@ -116,6 +118,7 @@ void keBugCheck(const char *fmt, ...)
 {
     va_list ap;
 
+    keAcquireSpinLock(&lock);   /* Never release */
     va_start(ap, fmt);
     keGetBootParams(&params, 0);
     fbParams = &params.fbParams;
