@@ -33,8 +33,13 @@ build_limine() {
     $MAKE -C ntos/shim/limine/
 }
 
+build_omar() {
+    $MAKE -C tools/omar/
+}
+
 build() {
     build_limine
+    build_omar
 }
 
 echo "** fetching sources"
