@@ -25,5 +25,6 @@ typedef ULONG NTSTATUS;
 #define STATUS_NOT_SUPPORTED    0xC00000BB  /* Operation not supported */
 #define STATUS_INVALID_PARAM    0xC00000EF  /* Invalid parameter */
 #define STATUS_PROC_NOTFOUND    0x000000F0  /* Process not found */
+#define STATUS_PROC_NOEXEC      0x000000F1  /* Not executable */
 
 #endif  /* !_SDK_NTSTATUS_H_ */
