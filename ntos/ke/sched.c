@@ -37,6 +37,11 @@ keDequeueProc(SCHED_QUEUE *queue, PROCESS **result)
         return STATUS_INVALID_HANDLE;
     }
 
+    /* Is it empty? */
+    if (queue->q.nelem == 0) {
+        return STATUS_PROC_NOTFOUND;
+    }
+
     keAcquireSpinLock(&queue->lock);
     process = TAILQ_FIRST(&queue->q);
     if (process == NULL) {
