@@ -20,6 +20,7 @@
 #include <md/mcb.h>
 #include <rtl/string.h>
 #include <acpi/acpi.h>
+#include <mm/phys.h>
 #include <hal/mmu.h>
 #include <hal/kpcr.h>
 
@@ -48,12 +49,14 @@ static USIZE nAp = 0;
  *
  * @pml4Pa: Physical address that will end up in CR3
  * @entryPa: Entry physical address for AP
+ * @stackBase: Base stack address
  *
  * XXX: DO NOT REORDER - CALLED IN ASSEMBLY
  */
 typedef struct {
     ULONG_PTR pml4Pa;
     ULONG_PTR entryPa;
+    ULONG_PTR stackBase;
 } AP_BOOTSTRAP;
 
 static void
@@ -106,6 +109,8 @@ localApicLookup(APIC_HEADER *hdr, USIZE arg)
     bootstrap = PHYS_TO_VIRT(BOOTSTRAP_DESC_BASE);
     bootstrap->pml4Pa = vas.cr3;
     bootstrap->entryPa = (ULONG_PTR)mpApEntry;
+    bootstrap->stackBase = mmAllocFrame(1);
+    ASSERT(bootstrap->stackBase != 0);
 
     ipi.delmod = IPI_DELMOD_INIT;
     ipi.shand = IPI_SHAND_NONE;

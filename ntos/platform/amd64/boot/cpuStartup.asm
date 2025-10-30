@@ -65,8 +65,9 @@ longModeEntry:
     mov gs, ax
     mov ss, ax
 
-    mov rsp, 0x4000                         ;; Use 0x4000 as temp stack
-    xor rbp, rbp                            ;; Terminate callstack
+    mov rbx, qword [BOOTSTRAP_DESC + 16]    ;; Set stack base from bootstrap
+    mov rsp, rbx                            ;; Set up the stack pointer
+    xor rbp, rbp                            ;; Terminate the callstack
 
     mov rax, qword [BOOTSTRAP_DESC]
     mov cr3, rax
