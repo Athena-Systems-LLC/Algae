@@ -36,4 +36,9 @@ NTSTATUS keScheduleProc(SCHED_QUEUE *queue, PROCESS *process);
  */
 NTSTATUS keDequeueProc(SCHED_QUEUE *queue, PROCESS **result);
 
+/*
+ * Initialize the scheduler
+ */
+void kiSchedInit(void);
+
 #endif  /* !_KE_SCHED_H_ */

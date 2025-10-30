@@ -12,6 +12,7 @@
 #include <ke/sched.h>
 #include <ke/defs.h>
 #include <ke/spinlock.h>
+#include <ex/process.h>
 #include <hal/kpcr.h>
 #include <md/mcb.h>     /* standard */
 #include <ntstatus.h>
@@ -48,11 +49,13 @@ typedef struct {
  * @vId: Virtual / logical ID (assigned by the kernel)
  * @core: MD information
  * @queue: Process queue
+ * @curProc: Current process running
  */
 typedef struct kpcr {
     USHORT vId;
     MCB core;
     SCHED_QUEUE queue;
+    PROCESS *curProc;
     struct kpcr *self;
 } KPCR;
 

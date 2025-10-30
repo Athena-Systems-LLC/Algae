@@ -7,9 +7,13 @@
 
 #include <ke/sched.h>
 #include <ke/spinlock.h>
+#include <ke/bugCheck.h>
+#include <ke/timer.h>
 #include <hal/mdefs.h>
 #include <ex/process.h>
 #include <ntstatus.h>
+
+KTIMER *g_schedTimer;
 
 NTSTATUS
 keScheduleProc(SCHED_QUEUE *queue, PROCESS *process)
@@ -44,4 +48,15 @@ keDequeueProc(SCHED_QUEUE *queue, PROCESS **result)
     keReleaseSpinLock(&queue->lock);
     *result = process;
     return STATUS_SUCCESS;
+}
+
+void
+kiSchedInit(void)
+{
+    NTSTATUS status;
+
+    status = keTimerGetDescriptor("/clkdev/sched", &g_schedTimer);
+    if (status != STATUS_SUCCESS) {
+        keBugCheck("failed to get scheduler timer\n");
+    }
 }

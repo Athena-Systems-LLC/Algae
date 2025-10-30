@@ -9,11 +9,22 @@
 #define _HAL_PROCESS_H_ 1
 
 #include <md/pcb.h>     /* shared */
+#include <md/frame.h>   /* shared */
 #include <ntstatus.h>
 
 /*
  * Initialize a process control block
  */
 NTSTATUS halInitPcb(PCB *pcb);
+
+/*
+ * Switch the current thread
+ */
+NTSTATUS halSchedSwitch(struct trapFrame *frame);
+
+/*
+ * Enter the scheduler
+ */
+void halSchedEnter(void);
 
 #endif  /* !_HAL_PROCESS_H_ */

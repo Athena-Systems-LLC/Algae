@@ -12,5 +12,5 @@
     .globl lapic_tmr_isr
 INTR_ENTRY(lapic_tmr_isr)
     mov %rsp, %rdi
-    nop
+    call halSchedSwitch
 INTR_EXIT(lapic_tmr_isr)

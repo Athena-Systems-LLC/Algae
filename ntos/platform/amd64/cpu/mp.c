@@ -22,6 +22,7 @@
 #include <acpi/acpi.h>
 #include <mm/phys.h>
 #include <hal/mmu.h>
+#include <hal/process.h>
 #include <hal/kpcr.h>
 
 #define AP_MAX 256
@@ -76,9 +77,8 @@ mpApEntry(void)
     kiLapicInitTimer();
     keReleaseSpinLock(&apLock);
 
-    for (;;) {
-        ASMV("pause");
-    }
+    ASMV("sti");
+    halSchedEnter();
 }
 
 /*

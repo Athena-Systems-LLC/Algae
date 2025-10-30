@@ -7,6 +7,11 @@
 
 #include <hal/process.h>
 #include <hal/mmu.h>
+#include <ke/timer.h>
+#include <ke/defs.h>
+#include <ex/trace.h>
+
+extern KTIMER *g_schedTimer;
 
 NTSTATUS
 halInitPcb(PCB *pcb)
@@ -17,4 +22,19 @@ halInitPcb(PCB *pcb)
 
     mmuReadVas(&pcb->vas);
     return STATUS_SUCCESS;
+}
+
+NTSTATUS
+halSchedSwitch(struct trapFrame *frame)
+{
+    for (;;) {
+        ASMV("cli; hlt");
+    }
+}
+
+void
+halSchedEnter(void)
+{
+    keTimerOneshotUsec(g_schedTimer, 5000);
+    for (;;);
 }
