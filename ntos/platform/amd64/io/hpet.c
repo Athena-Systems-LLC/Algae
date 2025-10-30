@@ -138,7 +138,7 @@ kiHpetInit(void)
     /* Grab values from general capabilities */
     value = hpetRead(HPET_REG_CAPS);
     clkPeriod = CAP_CLK_PERIOD(value);
-    revId = CAP_REV_ID(value);
+    revId = CAP_REV_ID(value);
 
     /*
      * Clock period must NOT be zero and its maximum value
