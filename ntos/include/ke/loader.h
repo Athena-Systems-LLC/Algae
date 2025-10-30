@@ -5,8 +5,8 @@
  * Provided under the BSD 3-Clause license.
  */
 
-#ifndef _EX_LOADER_H_
-#define _EX_LOADER_H_
+#ifndef _KE_LOADER_H_
+#define _KE_LOADER_H_
 
 #include <ke/types.h>
 #include <ntstatus.h>
@@ -27,9 +27,9 @@ typedef struct {
  * @path: Path of program to load
  * @result: Result is written here
  */
-NTSTATUS exLoadFromBootPack(
+NTSTATUS keLoadFromBootPack(
     const CHAR *path,
     LOADER_PROGRAM *result
 );
 
-#endif  /* !_EX_LOADER_H_ */
+#endif  /* !_KE_LOADER_H_ */

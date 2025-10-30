@@ -5,7 +5,7 @@
  * Provided under the BSD 3-Clause license.
  */
 
-#include <ex/loader.h>
+#include <ke/loader.h>
 #include <ke/types.h>
 #include <ke/defs.h>
 #include <ke/bootPack.h>
@@ -86,7 +86,7 @@ loadPe64(IMAGE_PE_HEADER *peHdr)
 }
 
 NTSTATUS
-exLoadFromBootPack(const CHAR *path, LOADER_PROGRAM *result)
+keLoadFromBootPack(const CHAR *path, LOADER_PROGRAM *result)
 {
     CHAR *rawData;
     IMAGE_DOS_HEADER *hdr;
