@@ -9,6 +9,7 @@
 #include <ke/bugCheck.h>
 #include <ke/types.h>
 #include <rtl/limine.h>
+#include <rtl/string.h>
 
 #define FRAMEBUFFER \
     frameBufReq.response->framebuffers[0]
@@ -28,6 +29,10 @@ static volatile struct limine_rsdp_request rsdpReq = {
     .id = LIMINE_RSDP_REQUEST,
     .revision = 0
 };
+static volatile struct limine_module_request modReq = {
+    .id = LIMINE_MODULE_REQUEST,
+    .revision = 0
+};
 
 static void
 getFbParams(struct fbParams *params)
@@ -37,6 +42,29 @@ getFbParams(struct fbParams *params)
     params->height = FRAMEBUFFER->height;
     params->pitch = FRAMEBUFFER->pitch;
     params->bpp = FRAMEBUFFER->bpp;
+}
+
+char *
+keGetBootModule(const char *path)
+{
+    struct limine_module_response *modResp;
+    struct limine_file *file;
+    USIZE modCount;
+
+    modResp = modReq.response;
+    if (modResp == NULL) {
+        keBugCheck("unable to get the boot module\n");
+    }
+
+    modCount = modResp->module_count;
+    for (USIZE i = 0; i < modCount; ++i) {
+        file = modResp->modules[i];
+        if (rtlStrcmp(file->path, path) == 0) {
+            return file->address;
+        }
+    }
+
+    return NULL;
 }
 
 ULONG_PTR

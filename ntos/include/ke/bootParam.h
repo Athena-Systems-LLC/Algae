@@ -43,6 +43,16 @@ struct bootParams {
 int keGetBootParams(struct bootParams *res, int flags);
 
 /*
+ * Get the base address of the data of some
+ * module
+ *
+ * @path: Path of module to fetch
+ *
+ * Returns the base of the module
+ */
+char *keGetBootModule(const char *path);
+
+/*
  * Return the kernel base offset which is used to convert
  * certain lower half physical addresses to higher half
  * physical addresses.
