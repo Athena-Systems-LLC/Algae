@@ -25,6 +25,9 @@
 #include <hal/process.h>
 #include <hal/kpcr.h>
 
+#define trace(...) \
+    exTrace(EX_TRACE_INFO, "mp: " __VA_ARGS__)
+
 #define AP_MAX 256
 #define TRAMPOLINE_PBASE 0x1000
 #define BOOTSTRAP_DESC_BASE 0x2000
@@ -100,7 +103,7 @@ localApicLookup(APIC_HEADER *hdr, USIZE arg)
      * ourselves with an INIT IPI
      */
     if (lapic->apicId == arg) {
-        exTrace(EX_TRACE_INFO, "skip APIC %d\n", arg);
+        trace("skip APIC %d\n", arg);
         return -1;
     }
 
@@ -194,12 +197,12 @@ kiMpInit(void)
     }
 
     /* Get each processor */
-    exTrace(EX_TRACE_INFO, "bringing up APs...\n");
+    trace("bringing up APs...\n");
     acpiReadMadt(
         APIC_TYPE_LOCAL_APIC,
         localApicLookup,
         mcb->hwId
     );
 
-    exTrace(EX_TRACE_INFO, "bootstrapped %d cores\n", nAp);
+    trace("bootstrapped %d cores\n", nAp);
 }

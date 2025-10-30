@@ -133,7 +133,7 @@ kiHpetInit(void)
     /* Grab the address base */
     gas = &hpet->gas;
     hpetBase = PHYS_TO_VIRT(gas->address);
-    exTrace(EX_TRACE_INFO, "HPET detected - verifying integrity...\n");
+    exTrace(EX_TRACE_INFO, "hpet: HPET detected - verifying integrity...\n");
 
     /* Grab values from general capabilities */
     value = hpetRead(HPET_REG_CAPS);
