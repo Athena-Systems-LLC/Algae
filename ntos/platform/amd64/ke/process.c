@@ -70,7 +70,7 @@ halSchedSwitch(struct trapFrame *frame)
     mmuWriteVas(&pcb->vas, 0);
 done:
     kiLapicEoi();
-    keTimerOneshotUsec(g_schedTimer, SCHED_SHORT_QUANTUM);
+    keTimerOneshotUsec(g_schedTimer, SCHED_QUANTUM);
 }
 
 void
