@@ -76,4 +76,9 @@ void kiLapicInitTimer(void);
  */
 void kiLapicInit(void);
 
+/*
+ * Send an end-of-interrupt signal
+ */
+void kiLapicEoi(void);
+
 #endif /* !_MACHINE_LAPIC_H_ */

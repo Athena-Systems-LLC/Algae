@@ -406,6 +406,16 @@ kiLapicSendIpi(const LAPIC_IPI *ipi)
 }
 
 void
+kiLapicEoi(void)
+{
+    KPCR *kpcr;
+
+    kpcr = keGetCore();
+    ASSERT(kpcr != NULL) ;
+    lapicWrite(&kpcr->core, LAPIC_EOI, 0);
+}
+
+void
 kiLapicInit(void)
 {
     TSS_STACK tmrStack;
