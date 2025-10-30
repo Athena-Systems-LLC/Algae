@@ -63,7 +63,7 @@ halSchedSwitch(struct trapFrame *frame)
 
     /* Load the next frame into the live frame */
     pcb = &next->pcb;
-    rtlMemcpy(frame, &pcb->tf, 1);
+    rtlMemcpy(frame, &pcb->tf, sizeof(*frame));
     core->curProc = next;
 
     /* Switch the address space */
