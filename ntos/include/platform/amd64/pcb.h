@@ -9,15 +9,18 @@
 #define _MACHINE_PCB_H_
 
 #include <ke/types.h>
+#include <md/frame.h>
 #include <md/vas.h>
 
 /*
  * Process control block structure
  *
  * @vas: Virtual address space
+ * @tf: Trapframe store
  */
 typedef struct {
     MMU_VAS vas;
+    struct trapFrame tf;
 } PCB;
 
 #endif  /* !_MACHINE_PCB_H_ */

@@ -20,7 +20,7 @@ NTSTATUS halInitPcb(PCB *pcb);
 /*
  * Switch the current thread
  */
-NTSTATUS halSchedSwitch(struct trapFrame *frame);
+void halSchedSwitch(struct trapFrame *frame);
 
 /*
  * Enter the scheduler

@@ -14,6 +14,9 @@
 #include <ex/process.h>
 #include <ntstatus.h>
 
+#define SCHED_QUANTUM 5000
+#define SCHED_SHORT_QUANTUM 500
+
 typedef struct {
     TAILQ_HEAD(, process) q;
     KSPIN_LOCK lock;
