@@ -26,4 +26,12 @@
  */
 void *mmAllocPage(USIZE count, USHORT flags);
 
+/*
+ * Free virtual memory pages
+ *
+ * @base: Address base to free at
+ * @count: Number of pages to free
+ */
+void mmFreePages(void *base, USIZE count);
+
 #endif  /* !_MM_VM_H_ */

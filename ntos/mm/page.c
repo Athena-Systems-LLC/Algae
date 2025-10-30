@@ -20,3 +20,16 @@ mmAllocPage(USIZE count, USHORT flags)
 
     return PHYS_TO_VIRT(pBase);
 }
+
+void
+mmFreePages(void *base, USIZE count)
+{
+    ULONG_PTR pBase;
+
+    if (base == NULL) {
+        return;
+    }
+
+    pBase = VIRT_TO_PHYS(pBase);
+    mmFreeFrame(pBase, count);
+}
