@@ -42,7 +42,7 @@ exCreateProcess(const CHAR *name, PROCESS **result, USHORT flags)
     );
 
     process->pid = nextPid++;
-    status = keInitProcess(process);
+    status = keInitProcess(process, flags);
 
     /* Did initializing succeed? */
     if (status != STATUS_SUCCESS) {

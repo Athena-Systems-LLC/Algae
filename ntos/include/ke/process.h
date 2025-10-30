@@ -14,9 +14,12 @@
 /*
  * Initialize a process
  *
+ * @process: Process to initialize
+ * @flags: Optional flags
+ *
  * Use exCreateProcess() instead of process
  * creation
  */
-NTSTATUS keInitProcess(PROCESS *process);
+NTSTATUS keInitProcess(PROCESS *process, USHORT flags);
 
 #endif  /* !_KE_PROCESS_H_ */

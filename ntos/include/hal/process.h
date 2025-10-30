@@ -14,8 +14,11 @@
 
 /*
  * Initialize a process control block
+ *
+ * @pcb: PCB to initialize
+ * @flags: Optional flags
  */
-NTSTATUS halInitPcb(PCB *pcb);
+NTSTATUS halInitPcb(PCB *pcb, USHORT flags);
 
 /*
  * Switch the current thread

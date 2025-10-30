@@ -17,7 +17,7 @@
 extern KTIMER *g_schedTimer;
 
 NTSTATUS
-halInitPcb(PCB *pcb)
+halInitPcb(PCB *pcb, USHORT flags)
 {
     if (pcb == NULL) {
         return STATUS_INVALID_HANDLE;

@@ -9,11 +9,11 @@
 #include <hal/process.h>
 
 NTSTATUS
-keInitProcess(PROCESS *process)
+keInitProcess(PROCESS *process, USHORT flags)
 {
     if (process == NULL) {
         return STATUS_INVALID_HANDLE;
     }
 
-    return halInitPcb(&process->pcb);
+    return halInitPcb(&process->pcb, flags);
 }
