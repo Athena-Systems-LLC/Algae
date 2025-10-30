@@ -3,6 +3,7 @@
 *.d
 *.iso
 *.bin
+*.exe
 /cc
 /ntos/shim/
 /ntos/ke/ksyms.c
