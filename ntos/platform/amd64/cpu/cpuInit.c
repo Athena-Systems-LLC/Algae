@@ -103,6 +103,7 @@ void
 halCpuInit(KPCR *kpcr)
 {
     cpuInitGdt(&kpcr->core);
+    TAILQ_INIT(&kpcr->queue.q);
 
     /* Enable interrupts */
     kiIdtLoad();
