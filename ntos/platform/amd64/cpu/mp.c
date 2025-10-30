@@ -76,6 +76,7 @@ mpApEntry(void)
     apList[nAp++] = kpcr;
     ASSERT(nAp < AP_MAX);
 
+    TAILQ_INIT(&kpcr->queue.q);
     kiProcessorInit(kpcr);
     kiLapicInitTimer();
     keReleaseSpinLock(&apLock);
