@@ -58,4 +58,11 @@ NTSTATUS mmuWriteVas(MMU_VAS *vas, USHORT flags);
  */
 NTSTATUS mmuReadVas(MMU_VAS *res);
 
+/*
+ * Allocate a new virtual address space
+ *
+ * @res: Result is written here
+ */
+NTSTATUS mmuCreateVas(MMU_VAS *res);
+
 #endif  /* !_HAL_MMU_H_ */

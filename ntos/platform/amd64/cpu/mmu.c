@@ -217,3 +217,27 @@ mmuMapSingle(MMU_VAS *vas, ULONG_PTR vBase, ULONG_PTR pBase, USHORT mFlags)
     mmuTlbFlush(vBase);
     return STATUS_SUCCESS;
 }
+
+NTSTATUS
+mmuCreateVas(MMU_VAS *res)
+{
+    MMU_VAS curVas;
+    ULONG_PTR pBase;
+    ULONG_PTR *vBase, *vBaseSrc;
+
+    mmuReadVas(&curVas);
+    vBaseSrc = PHYS_TO_VIRT(curVas.cr3 & PTE_ADDR_MASK);
+
+    pBase = mmAllocFrame(1);
+    if (pBase == 0) {
+        return STATUS_NO_MEMORY;
+    }
+
+    vBase = PHYS_TO_VIRT(pBase);
+    for (USHORT i = 0; i < 512; ++i) {
+        vBase[i] = (i < 256) ? 0 : vBaseSrc[i];
+    }
+
+    res->cr3 = pBase;
+    return STATUS_SUCCESS;
+}
