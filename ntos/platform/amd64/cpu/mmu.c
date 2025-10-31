@@ -110,6 +110,8 @@ mmuGetLevelPhys(MMU_VAS *vas, ULONG_PTR virtAddr, MAP_LEVEL level, BOOLEAN alloc
         if (ISSET(tmpVal, PTE_P)) {
             tmpVal = tmpVal & PTE_ADDR_MASK;
             curTable = PHYS_TO_VIRT(tmpVal);
+            --curLevel;
+            continue;
         }
 
         /* Don't continue if we can't alloc */
