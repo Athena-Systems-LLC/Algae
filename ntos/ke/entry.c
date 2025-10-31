@@ -47,7 +47,10 @@ kMain(void)
 
     /* Load the first process */
     mmuWriteVas(&proc->pcb.vas, 0);
-    keLoadFromBootPack("/system64/csrs.exe", &prog);
+    status = keLoadFromBootPack("/system64/csrs.exe", &prog);
+    if (status != STATUS_SUCCESS) {
+        keBugCheck("failed to load csrs.exe from system64\n");
+    }
 
     /* Start it up and kick it! */
     halProcSetIp(&proc->pcb, prog.entry);
