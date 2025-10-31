@@ -30,6 +30,7 @@ allocKernelStack(TSS_ENTRY *entry)
     }
 
     rsp0 += STACK_SIZE_PAGES * PAGESIZE;
+    rsp0 += keGetKernelBase();
     entry->rsp0Lo = rsp0 & 0xFFFFFFFF;
     entry->rsp0Hi = (rsp0 >> 32) & 0xFFFFFFFF;
 }
