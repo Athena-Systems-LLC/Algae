@@ -107,7 +107,7 @@ loadPe64(IMAGE_PE_HEADER *peHdr, IMAGE_DOS_HEADER *dhdr, LOADER_PROGRAM *program
 
         region.pBase = VIRT_TO_PHYS(mapWindow);
         region.vBase = (void *)(UQUAD)sect->virtualAddr;
-        region.byteCount = sect->virtualSize;
+        region.byteCount = ALIGN_UP(sect->virtualSize, PAGESIZE);
         data = PTR_OFFSET(dhdr, sect->rawDataPtr);
 
         /* Copy and map */
