@@ -150,6 +150,16 @@ mmuGetTableFlags(USHORT mapType)
     case PAGE_EXECUTE_READ:
         pteFlags &= ~PTE_NX;
         return pteFlags;
+    case PAGE_USER_READONLY:
+        pteFlags |= PTE_US;
+        return pteFlags;
+    case PAGE_USER_READWRITE:
+        pteFlags |= (PTE_RW | PTE_US);
+        return pteFlags;
+    case PAGE_USER_EXEC_READ:
+        pteFlags &= ~PTE_NX;
+        pteFlags |= PTE_US;
+        return pteFlags;
     }
 
     return pteFlags;
