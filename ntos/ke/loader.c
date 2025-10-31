@@ -118,8 +118,10 @@ loadPe64(IMAGE_PE_HEADER *peHdr, IMAGE_DOS_HEADER *dhdr, LOADER_PROGRAM *program
             PAGE_EXECUTE_READ,
             0
         );
+
         sect = PTR_OFFSET(sect, SECT_HDR_LEN);
     }
+
     return STATUS_SUCCESS;
 }
 
@@ -129,6 +131,7 @@ keLoadFromBootPack(const CHAR *path, LOADER_PROGRAM *result)
     CHAR *rawData;
     IMAGE_DOS_HEADER *hdr;
     IMAGE_PE_HEADER *peHdr;
+    IMAGE_OPTIONAL_HEADER *optHdr;
 
     if (path == NULL || result == NULL) {
         return STATUS_INVALID_HANDLE;
@@ -148,6 +151,8 @@ keLoadFromBootPack(const CHAR *path, LOADER_PROGRAM *result)
         return STATUS_PROC_NOEXEC;
     }
 
+    optHdr = PTR_OFFSET(peHdr, sizeof(IMAGE_PE_HEADER));
     loadPe64(peHdr, hdr, result);
+    result->entry = optHdr->addressOfEntryPoint;
     return STATUS_SUCCESS;
 }
