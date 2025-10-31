@@ -49,6 +49,12 @@ void *mmAllocPage(USIZE count, USHORT flags);
 void mmFreePages(void *base, USIZE count);
 
 /*
+ * Obtain the currently in use virtual address
+ * space
+ */
+MMU_VAS mmGetCurrentVas(void);
+
+/*
  * Map a contigious region of pages
  *
  * @vas: Virtual address space to map in

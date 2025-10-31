@@ -70,3 +70,12 @@ mmMapPages(MMU_VAS *vas, MM_REGION *region, USHORT prot, USHORT flags)
     }
     return region->vBase;
 }
+
+MMU_VAS
+mmGetCurrentVas(void)
+{
+    MMU_VAS vas;
+
+    mmuReadVas(&vas);
+    return vas;
+}
