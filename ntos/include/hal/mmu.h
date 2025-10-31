@@ -37,6 +37,15 @@ NTSTATUS mmuMapSingle(
 );
 
 /*
+ * Unmap a virtual address from the desired virtual
+ * address space
+ *
+ * @vas: VAS to unmap virtual address from
+ * @vBase: Virtual address base to unmap
+ */
+NTSTATUS mmuUnmapSingle(MMU_VAS *vas, ULONG_PTR vBase);
+
+/*
  * Update the current virtual address space
  * for the processor
  *

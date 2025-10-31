@@ -219,6 +219,44 @@ mmuMapSingle(MMU_VAS *vas, ULONG_PTR vBase, ULONG_PTR pBase, USHORT mFlags)
 }
 
 NTSTATUS
+mmuUnmapSingle(MMU_VAS *vas, ULONG_PTR vBase)
+{
+    USHORT pteIdx;
+    ULONG_PTR ptePhys;
+    ULONG_PTR *pte;
+    QUAD mapFlags;
+
+    if (vas == NULL) {
+        return STATUS_INVALID_HANDLE;
+    }
+
+    /* Align the virtual address down */
+    vBase = ALIGN_DOWN(vBase, PAGESIZE);
+    ptePhys = mmuGetLevelPhys(
+        vas,
+        vBase,
+        MAP_LEVEL_PT,
+        false
+    );
+
+    /* Is it already unmapped? */
+    if (ptePhys == 0) {
+        return STATUS_SUCCESS;
+    }
+
+    pte = PHYS_TO_VIRT(ptePhys);
+    pteIdx = mmuGetLevelIdx(vBase, MAP_LEVEL_PT);
+
+    /*
+     * Update the entry and flush it from the TLB
+     * so we don't get any stale cache hits
+     */
+    pte[pteIdx] = 0;
+    mmuTlbFlush(vBase);
+    return STATUS_SUCCESS;
+}
+
+NTSTATUS
 mmuCreateVas(MMU_VAS *res)
 {
     MMU_VAS curVas;
