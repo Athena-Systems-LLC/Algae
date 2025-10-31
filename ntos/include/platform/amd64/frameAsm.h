@@ -8,37 +8,24 @@
 #ifndef _MACHINE_FRAMEASM_H_
 #define _MACHINE_FRAMEASM_H_ 1
 
-/*
- * If the interrupt has an error code, this macro shall
- * be used to create the trapframe.
- *
- * XXX: A trapframe created with this must be popped with
- *      pop_trapframe_ec
- */
-#define PUSH_TRAPFRAME_EC(TRAPNO) \
-    push %r15                   ; \
-    push %r14                   ; \
-    push %r13                   ; \
-    push %r12                   ; \
-    push %r11                   ; \
-    push %r10                   ; \
-    push %r9                    ; \
-    push %r8                    ; \
-    push %rbp                   ; \
-    push %rdi                   ; \
-    push %rsi                   ; \
-    push %rbx                   ; \
-    push %rdx                   ; \
-    push %rcx                   ; \
-    push %rax                   ; \
-    push TRAPNO
+#define PUSH_ALL    \
+    push %r15      ;\
+    push %r14      ;\
+    push %r13      ;\
+    push %r12      ;\
+    push %r11      ;\
+    push %r10      ;\
+    push %r9       ;\
+    push %r8       ;\
+    push %rbp      ;\
+    push %rdi      ;\
+    push %rsi      ;\
+    push %rbx      ;\
+    push %rdx      ;\
+    push %rcx      ;\
+    push %rax      ;
 
-/*
- * If the interrupt has an error code, this macro shall
- * be used to cleanup the trapframe.
- */
-#define POP_TRAPFRAME_EC                  \
-    add $8, %rsp        /* Trapno */    ; \
+#define POP_ALL                         ; \
     pop %rax                            ; \
     pop %rcx                            ; \
     pop %rdx                            ; \
@@ -54,6 +41,25 @@
     pop %r13                            ; \
     pop %r14                            ; \
     pop %r15
+
+/*
+ * If the interrupt has an error code, this macro shall
+ * be used to create the trapframe.
+ *
+ * XXX: A trapframe created with this must be popped with
+ *      pop_trapframe_ec
+ */
+#define PUSH_TRAPFRAME_EC(TRAPNO) \
+    PUSH_ALL                      \
+    push TRAPNO
+
+/*
+ * If the interrupt has an error code, this macro shall
+ * be used to cleanup the trapframe.
+ */
+#define POP_TRAPFRAME_EC                  \
+    add $8, %rsp        /* Trapno */    ; \
+    POP_ALL                             ; \
 
 /*
  * If the interrupt has no error code, this macro
