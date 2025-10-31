@@ -10,6 +10,7 @@
 
 #include <ke/bootParam.h>
 #include <ke/types.h>
+#include <hal/mmu.h>
 #include <md/vas.h>     /* shared */
 
 #define PAGESIZE 4096

@@ -11,6 +11,7 @@
 #include <ke/sched.h>
 #include <ke/bootPack.h>
 #include <md/mp.h>      /* shared */
+#include <ke/loader.h>
 #include <ex/pool.h>
 #include <ob/objectStore.h>
 

@@ -10,6 +10,7 @@
 
 #include <ke/types.h>
 #include <ntstatus.h>
+#include <ex/box.h>
 
 /*
  * Represents a loaded program from the
@@ -19,10 +20,14 @@
  */
 typedef struct {
     ULONG_PTR entry;
+    PTRBOX runTimeInfo;
 } LOADER_PROGRAM;
 
 /*
  * Load a program from the bootpack
+ *
+ * XXX: This function maps the currently loaded
+ *      virtual address space
  *
  * @path: Path of program to load
  * @result: Result is written here

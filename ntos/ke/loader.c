@@ -9,7 +9,12 @@
 #include <ke/types.h>
 #include <ke/defs.h>
 #include <ke/bootPack.h>
+#include <ke/kpcr.h>
+#include <ke/assert.h>
 #include <ex/trace.h>
+#include <ex/box.h>
+#include <mm/vm.h>
+#include <mm/phys.h>
 #include <rtl/pe.h>
 #include <rtl/string.h>
 #include <ntstatus.h>
@@ -70,16 +75,49 @@ peVerifyHeader(IMAGE_DOS_HEADER *hdr)
 }
 
 static NTSTATUS
-loadPe64(IMAGE_PE_HEADER *peHdr)
+loadPe64(IMAGE_PE_HEADER *peHdr, IMAGE_DOS_HEADER *dhdr, LOADER_PROGRAM *program)
 {
+    MMU_VAS vas;
+    MM_REGION region;
     IMAGE_SECTION_HEADER *sect;
+    NTSTATUS status;
+    CHAR *mapWindow, *data;
     USIZE off;
 
+    vas = mmGetCurrentVas();
     off = sizeof(IMAGE_PE_HEADER) + peHdr->e_opthdr_sz;
     sect = PTR_OFFSET(peHdr, off);
+    exInitPtrBox(&program->runTimeInfo);
 
     for (int i = 0; i < peHdr->e_numsect; ++i) {
         traceInfo("discovered section \"%s\"\n", sect->name);
+
+        status = exBoxAllocate(
+            &program->runTimeInfo,
+            sect->virtualSize,
+            PTRBOX_PAGES,
+            (void **)&mapWindow
+        );
+
+        if (status != STATUS_SUCCESS) {
+            traceErr("failed to map \"%s\"\n", sect->name);
+            exBoxRelease(&program->runTimeInfo, PTRBOX_ANY);
+            return status;
+        }
+
+        region.pBase = VIRT_TO_PHYS(mapWindow);
+        region.vBase = (void *)(UQUAD)sect->virtualAddr;
+        region.byteCount = sect->virtualSize;
+        data = PTR_OFFSET(dhdr, sect->rawDataPtr);
+
+        /* Copy and map */
+        rtlMemcpy(mapWindow, data, sect->rawDataSize);
+        mapWindow = mmMapPages(
+            &vas,
+            &region,
+            PAGE_EXECUTE_READ,
+            0
+        );
         sect = PTR_OFFSET(sect, SECT_HDR_LEN);
     }
     return STATUS_SUCCESS;
@@ -110,6 +148,6 @@ keLoadFromBootPack(const CHAR *path, LOADER_PROGRAM *result)
         return STATUS_PROC_NOEXEC;
     }
 
-    loadPe64(peHdr);
+    loadPe64(peHdr, hdr, result);
     return STATUS_SUCCESS;
 }
