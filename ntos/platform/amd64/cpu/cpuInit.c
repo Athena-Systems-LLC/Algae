@@ -18,11 +18,14 @@
 #include <md/gdt.h>
 #include <md/idt.h>
 #include <md/trap.h>
+#include <mm/phys.h>
+#include <mm/vm.h>
 
 #define ISR(fn) (ULONG_PTR)fn
 
 static GDT_GDTR gdtr;
 extern void lapic_tmr_isr(void);
+extern void syscall_handler(void);
 
 static void
 halRegisterIntr(void)
@@ -100,8 +103,40 @@ keGetCore(void)
 }
 
 void
+halInitSyscall(void)
+{
+    UQUAD msr;
+    ULONG edx, unused;
+
+    CPUID(0x80000001, unused, unused, unused, edx);
+    if (!ISSET(edx, BIT(11))) {
+        keBugCheck("SYSCALL/SYSRET not supported by CPU\n");
+    }
+
+    /* Enable the syscall instruction */
+    msr = rdmsr(IA32_EFER);
+    wrmsr(IA32_EFER, msr | 1);
+
+    /* Write the STAR MSR */
+    msr = ((UQUAD)USER_CS << 48) | ((UQUAD)KERNEL_CS << 32);
+    wrmsr(IA32_STAR, msr);
+
+    /* Write the handler to IA32_LSTAR */
+    msr = (UQUAD)syscall_handler;
+    wrmsr(IA32_LSTAR, msr);
+
+    /* Disable interrupts on entry */
+    msr = rdmsr(IA32_SFMASK);
+    msr |= (1 << 9);
+    wrmsr(IA32_SFMASK, msr);
+}
+
+void
 halCpuInit(KPCR *kpcr)
 {
+    MCB *mcb;
+
+    mcb = &kpcr->core;
     cpuInitGdt(&kpcr->core);
     TAILQ_INIT(&kpcr->queue.q);
 
@@ -121,4 +156,13 @@ halCpuInit(KPCR *kpcr)
 
     /* Put ourselves at the passive level */
     halSetIrql(PASSIVE_LEVEL);
+
+    /* Allocate ourselves a system call stack */
+    mcb->syscallStack = mmAllocFrame(1);
+    if (mcb->syscallStack == 0) {
+        keBugCheck("failed to allocate system call stack\n");
+    }
+
+    /* We want to start at the top, grows down */
+    mcb->syscallStack += keGetKernelBase() + (PAGESIZE - 1);
 }

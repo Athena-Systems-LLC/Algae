@@ -46,14 +46,14 @@ typedef struct {
  * architectures and contains general MI information about
  * a processor core
  *
+ * @core: MD information [XXX: MUST BE THE FIRST FIELD]
  * @vId: Virtual / logical ID (assigned by the kernel)
- * @core: MD information
  * @queue: Process queue
  * @curProc: Current process running
  */
 typedef struct kpcr {
+    MCB core;               /* DO NOT REORDER */
     USHORT vId;
-    MCB core;
     SCHED_QUEUE queue;
     PROCESS *curProc;
     struct kpcr *self;

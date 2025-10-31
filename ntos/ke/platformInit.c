@@ -19,6 +19,7 @@ kiPlatformInit(void)
     mmPhysInit();
     acpiInit();
     halInitIrqChip();
+    halInitSyscall();
     return 0;
 }
 

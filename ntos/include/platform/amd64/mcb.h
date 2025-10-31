@@ -22,6 +22,8 @@
  * contains MD specific information about a processor
  * core
  *
+ * @syscallStack: Stack switched to on syscall entry
+ * @syscallStackSave: Save area for old stack pre syscall
  * @lapicBase: Virtual Local APIC MMIO base address
  * @hwId: Local APIC ID
  * @lapicTmrFreq: Frequency of Local APIC timer
@@ -31,6 +33,8 @@
  * @tss: Task state segment
  */
 typedef struct {
+    ULONG_PTR syscallStack;     /* DO NOT REORDER */
+    ULONG_PTR syscallStackSave; /* DO NOT REORDER */
     ULONG_PTR lapicBase;
     USHORT hwId;
     USIZE lapicTmrFreq;

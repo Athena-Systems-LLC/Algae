@@ -23,4 +23,10 @@ void halCpuInit(KPCR *kpcr);
  */
 void halCpuHalt(CPU_HALT_MODE mode);
 
+/*
+ * Initialize CPU specific system call
+ * facilities
+ */
+void halInitSyscall(void);
+
 #endif  /* !_HAL_CPU_H_ */
