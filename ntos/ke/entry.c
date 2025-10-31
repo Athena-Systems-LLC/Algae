@@ -20,6 +20,9 @@ static KPCR kpcrBsp;
 void
 kMain(void)
 {
+    NTSTATUS status;
+    MMU_VAS vas;
+
     kiPlatformInit();
     kiProcessorInit(&kpcrBsp);
     kiBootScreen();
@@ -29,5 +32,12 @@ kMain(void)
     kiSchedInit();
     kiMpInit();
     kiBootPackInit();
+
+    status = mmuCreateVas(&vas);
+    mmuWriteVas(&vas, 0);
+    if (status != STATUS_SUCCESS) {
+        keBugCheck("failed to create new VAS\n");
+    }
+
     for (;;);
 }
