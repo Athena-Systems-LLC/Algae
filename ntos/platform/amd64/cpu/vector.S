@@ -9,14 +9,14 @@
 #include <md/trap.h>
 
     .text
-    .globl lapic_tmr_isr
-INTR_ENTRY(lapic_tmr_isr)
+    .globl lapicTmrIsr
+INTR_ENTRY(lapicTmrIsr)
     mov %rsp, %rdi
     call halSchedSwitch
-INTR_EXIT(lapic_tmr_isr)
+INTR_EXIT(lapicTmrIsr)
 
-    .globl syscall_handler
-syscall_handler:
+    .globl syscallHandler
+syscallHandler:
     lfence               // Serialize loads [swapgs spectre mitigation]
     swapgs               // Get the kernel %GS base
 
