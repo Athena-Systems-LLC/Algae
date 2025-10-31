@@ -23,7 +23,7 @@ halInitPcb(PCB *pcb, USHORT flags)
         return STATUS_INVALID_HANDLE;
     }
 
-    mmuReadVas(&pcb->vas);
+    mmuCreateVas(&pcb->vas);
     rtlMemset(&pcb->tf, 0, sizeof(pcb->tf));
     return STATUS_SUCCESS;
 }
