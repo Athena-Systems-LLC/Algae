@@ -15,7 +15,11 @@ CC := clang
 LD := ld
 
 .PHONY: all
-all: ntos iso
+all: rts ntos iso
+
+.PHONY: rts
+rts:
+	cd rts/; make
 
 .PHONY: iso
 iso:
