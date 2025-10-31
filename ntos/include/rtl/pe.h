@@ -14,6 +14,9 @@
 #define IMAGE_FILE_MACHINE_UNKNOWN 0x0000
 #define IMAGE_FILE_MACHINE_AMD64   0x8664
 
+/* Optional header magic */
+#define OPTHDR_MAG 0x20B
+
 typedef struct _IMAGE_DOS_HEADER {      /* DOS .EXE header */
     USHORT e_magic;                     /* Magic number */
     USHORT e_cblp;                      /* Bytes on last page of file */
@@ -58,5 +61,37 @@ typedef struct _IMAGE_SECTION_HEADER {
     USHORT lineNumbersCount;
     ULONG flags;
 } IMAGE_SECTION_HEADER;
+
+typedef struct _IMAGE_OPTIONAL_HEADER {
+    USHORT magic;       /* 0x020B */
+    UCHAR majorLinkerVersion;
+    UCHAR minorLinkerVersion;
+    ULONG sizeOfCode;
+    ULONG sizeOfInitializedData;
+    ULONG sizeOfUnitializeddata;
+    ULONG addressOfEntryPoint;
+    ULONG baseOfCode;
+    UQUAD imageBase;
+    ULONG sectionAlignment;
+    ULONG fileAlignment;
+    USHORT majorOperatingSystemVersion;
+    USHORT minorOperatingSystemVersion;
+    USHORT majorImageVersion;
+    USHORT minorImageVersion;
+    USHORT majorSubsystemVersion;
+    USHORT minorSubsystemVersion;
+    ULONG win32VersionValue;
+    ULONG sizeOfImage;
+    ULONG sizeOfHeaders;
+    ULONG checkSum;
+    USHORT subsystem;
+    USHORT dllCharacteristics;
+    UQUAD sizeOfStackReserve;
+    UQUAD sizeOfStackCommit;
+    UQUAD sizeOfHeapReserve;
+    UQUAD sizeOfHeapCommit;
+    ULONG loaderFlags;
+    ULONG numberOfRvaAndSizes;
+} IMAGE_OPTIONAL_HEADER;
 
 #endif  /* !_RTL_PE_H_ */
