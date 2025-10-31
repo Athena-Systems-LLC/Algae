@@ -115,7 +115,7 @@ loadPe64(IMAGE_PE_HEADER *peHdr, IMAGE_DOS_HEADER *dhdr, LOADER_PROGRAM *program
         mapWindow = mmMapPages(
             &vas,
             &region,
-            PAGE_EXECUTE_READ,
+            PAGE_USER_EXEC_READ,
             0
         );
 

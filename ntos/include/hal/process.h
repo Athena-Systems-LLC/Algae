@@ -8,6 +8,7 @@
 #ifndef _HAL_PROCESS_H_
 #define _HAL_PROCESS_H_ 1
 
+#include <ke/defs.h>
 #include <md/pcb.h>     /* shared */
 #include <md/frame.h>   /* shared */
 #include <ntstatus.h>
@@ -24,6 +25,17 @@ NTSTATUS halInitPcb(PCB *pcb, USHORT flags);
  * Switch the current thread
  */
 void halSchedSwitch(struct trapFrame *frame);
+
+/*
+ * Set the instruction pointer of a process to
+ * a specific value
+ */
+void halProcSetIp(PCB *pcb, ULONG_PTR ip);
+
+/*
+ * Kick a process into userland
+ */
+NORETURN void halProcKick(PCB *pcb);
 
 /*
  * Enter the scheduler

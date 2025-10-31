@@ -16,10 +16,12 @@
  * Process control block structure
  *
  * @vas: Virtual address space
+ * @stackPhysBase: Stack physical base address
  * @tf: Trapframe store
  */
 typedef struct {
     MMU_VAS vas;
+    UQUAD stackPhysBase;
     struct trapFrame tf;
 } PCB;
 

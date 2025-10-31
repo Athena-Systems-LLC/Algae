@@ -9,6 +9,7 @@
 #define _EX_PROCESS_H_ 1
 
 #include <ke/types.h>
+#include <ke/defs.h>
 #include <md/pcb.h>     /* shared */
 #include <rtl/queue.h>
 #include <ntstatus.h>
