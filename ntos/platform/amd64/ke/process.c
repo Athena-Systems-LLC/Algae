@@ -87,7 +87,7 @@ halInitPcb(PCB *pcb, USHORT flags)
 
     /* Map the stack */
     region.pBase = pcb->stackPhysBase;
-    region.vBase = (void *)(STACK_TOP - STACK_LEN);
+    region.vBase = (void *)STACK_TOP;
     region.byteCount = PAGESIZE;
     stackBase = mmMapPages(
         &pcb->vas,
