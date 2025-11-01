@@ -13,6 +13,35 @@
 
 static NT_OBJECT *mapper;
 
+NTSTATUS
+exMapperGet(const CHAR *path, MAPPER_OBJECT **result)
+{
+    NT_OBJECT *object;
+    NTSTATUS status;
+
+    if (path == NULL || result == NULL) {
+        return STATUS_INVALID_HANDLE;
+    }
+
+    status = obLookupObject(path, &object, 0);
+    if (status != STATUS_SUCCESS) {
+        return status;
+    }
+
+    /* This needs to be a mapper descriptor */
+    if (object->type != NT_OB_MAPPER) {
+        return STATUS_BAD_OBJ_TYPE;
+    }
+
+    /* We need data to return */
+    if (object->data == NULL) {
+        return STATUS_NOT_SUPPORTED;
+    }
+
+    *result = object->data;
+    return STATUS_SUCCESS;
+}
+
 /*
  * Initialize the mapper directory
  */

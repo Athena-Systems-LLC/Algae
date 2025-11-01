@@ -9,6 +9,7 @@
 #define _EX_MAPPER_H_
 
 #include <ke/types.h>
+#include <ntstatus.h>
 
 /*
  * Represents valid mapper types
@@ -44,5 +45,13 @@ typedef struct {
     MAPPER_TYPE type;
     MAPPER_REGION region;
 } MAPPER_OBJECT;
+
+/*
+ * Acquire a mapper descriptor
+ *
+ * @path: Path of descriptor to get
+ * @result: Result is written here
+ */
+NTSTATUS exMapperGet(const CHAR *path, MAPPER_OBJECT **result);
 
 #endif  /* !_EX_MAPPER_H_ */
