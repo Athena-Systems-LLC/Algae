@@ -8,10 +8,70 @@
 #include <ke/types.h>
 #include <ke/bootParam.h>
 #include <ke/defs.h>
+#include <ke/module.h>
+#include <ke/bugCheck.h>
+#include <ex/mapper.h>
+#include <ob/object.h>
 #include <rtl/string.h>
 #include <drv/bootVid.h>
+#include <ntstatus.h>
 
+static NT_OBJECT *fbMapper;
+static MAPPER_OBJECT mapperObj;
 extern UCHAR g_consFont[];
+
+/*
+ * Get the physical framebuffer base
+ * address
+ */
+static ULONG_PTR
+bootVidGetBase(void)
+{
+    struct bootParams params;
+    struct fbParams *fbParams;
+    int error;
+
+    error = keGetBootParams(&params, 0);
+    if (error < 0) {
+        return 0;
+    }
+
+    fbParams = &params.fbParams;
+    return (ULONG_PTR)fbParams->io - keGetKernelBase();
+}
+
+static NTSTATUS
+bootVidInit(void)
+{
+    ULONG_PTR fbBase;
+    MAPPER_REGION *region;
+    NTSTATUS status;
+    NT_OBJECT_CREATE params = {
+        .parent = "/mapper",
+        .name = "video0",
+        .type = NT_OB_MAPPER
+    };
+
+    fbBase = bootVidGetBase();
+    if (fbBase == 0) {
+        keBugCheck("failed to initialize fb mapper region\n");
+    }
+
+    /* Initialize the mapper object */
+    region = &mapperObj.region;
+    mapperObj.type = MAPPER_FIXED;
+    region->vBase = bootVidGetBase();
+    region->pBase = region->vBase;
+
+    /* We need to register the framebuffer */
+    status = obCreateObject(&params, &fbMapper);
+    if (status != STATUS_SUCCESS) {
+        keBugCheck("failed to register framebuffer\n");
+    }
+
+    fbMapper->data = &mapperObj;
+    return STATUS_SUCCESS;
+}
 
 /*
  * Get the index into the framebuffer with an x and y
@@ -117,3 +177,5 @@ bootVidClear(ULONG rgb)
         fbParams->io[i] = rgb;
     }
 }
+
+MODULE_EXPORT("bootvid", bootVidInit, MODULE_GENERIC);
