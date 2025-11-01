@@ -12,6 +12,7 @@
 #include <ke/types.h>
 #include <rtl/queue.h>
 
+#define NT_OBTAB_ENTRIES 32 /* Maximum open objects */
 #define NT_OBNAME_LEN 32    /* Max length of object name */
 
 /*
