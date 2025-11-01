@@ -56,4 +56,12 @@ typedef struct {
  */
 NTSTATUS exMapperGet(const CHAR *path, MAPPER_OBJECT **result);
 
+/*
+ * Engage the mapper object and map its underlying
+ * data
+ *
+ * @mapper: Mapper to engage
+ */
+NTSTATUS exMapperMap(MAPPER_OBJECT *mapper);
+
 #endif  /* !_EX_MAPPER_H_ */

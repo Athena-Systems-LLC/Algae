@@ -10,8 +10,37 @@
 #include <ke/bugCheck.h>
 #include <ke/defs.h>
 #include <ke/module.h>
+#include <mm/vm.h>
 
 static NT_OBJECT *mapper;
+
+/*
+ * Create a fixed mapping from a region descriptor
+ * of a mapper object
+ *
+ * @region: Fixed region to map
+ */
+static NTSTATUS
+mapperMapFixed(MAPPER_REGION *region)
+{
+    void *retVal;
+    MM_REGION mmRegion;
+    MMU_VAS vas;
+
+    vas = mmGetCurrentVas();
+    mmRegion.pBase = region->pBase;
+    mmRegion.vBase = (void *)region->vBase;
+    mmRegion.byteCount = region->length;
+    retVal = mmMapPages(
+        &vas,
+        &mmRegion,
+        region->prot,
+        0
+    );
+
+    return (retVal == NULL) ? STATUS_NO_MEMORY : STATUS_SUCCESS;
+}
+
 
 NTSTATUS
 exMapperGet(const CHAR *path, MAPPER_OBJECT **result)
@@ -40,6 +69,28 @@ exMapperGet(const CHAR *path, MAPPER_OBJECT **result)
 
     *result = object->data;
     return STATUS_SUCCESS;
+}
+
+NTSTATUS
+exMapperMap(MAPPER_OBJECT *mapper)
+{
+    NTSTATUS status = STATUS_NOT_SUPPORTED;
+    MAPPER_REGION *region;
+
+    if (mapper == NULL) {
+        return STATUS_INVALID_HANDLE;
+    }
+
+    switch (mapper->type) {
+    case MAPPER_FIXED:
+        status = mapperMapFixed(&mapper->region);
+        break;
+    case MAPPER_DYNAMIC:
+        /* XXX: Support this */
+        break;
+    }
+
+    return status;
 }
 
 /*
