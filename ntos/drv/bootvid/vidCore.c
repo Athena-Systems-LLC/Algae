@@ -14,6 +14,7 @@
 #include <ob/object.h>
 #include <rtl/string.h>
 #include <drv/bootVid.h>
+#include <mm/vm.h>
 #include <ntstatus.h>
 
 static NT_OBJECT *fbMapper;
@@ -62,6 +63,7 @@ bootVidInit(void)
     mapperObj.type = MAPPER_FIXED;
     region->vBase = bootVidGetBase();
     region->pBase = region->vBase;
+    region->prot = PAGE_USER_READWRITE;
 
     /* We need to register the framebuffer */
     status = obCreateObject(&params, &fbMapper);

@@ -28,11 +28,13 @@ typedef enum {
  * @vBase: Virtual base address     [page aligned]
  * @pBase: Physical base address    [page aligned]
  * @length: Length of region        [page aligned]
+ * @prot: Protection flags
  */
 typedef struct {
     ULONG_PTR vBase;
     ULONG_PTR pBase;
     USIZE length;
+    USHORT prot;
 } MAPPER_REGION;
 
 /*
