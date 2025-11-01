@@ -23,11 +23,12 @@ syscallHandler:
     movq %rsp, %gs:8     // Save old the stack           [SYSCALL STACK SAVE]
     movq %gs:0, %rsp     // Grab the system call stack   [SYSCALL STACK BASE]
     PUSH_ALL             // Save all our gpregs
+    sub $8, %rsp         // Skip error code
 
-    // ...
-    // XXX: CALL A SYSCALL TRAP HANDLER HERE
-    // ...
+    mov %rsp, %rdi
+    call trap_syscall
 
+    add $8, %rsp         // Undo stack subtraction
     POP_ALL              // Restore our gpregs
     movq %gs:8, %rsp     // Restore the stack pointer
     movq $0, %gs:8       // Clear the old value for security
