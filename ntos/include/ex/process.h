@@ -17,6 +17,9 @@
 #define PROCESS_UNAMED "unamed"
 #define PROCESS_NAMELEN 32
 
+/* exCreateProcess() flags */
+#define PROCESS_KERNEL BIT(0)   /* Kernel thread */
+
 typedef ULONG PID;
 
 /*

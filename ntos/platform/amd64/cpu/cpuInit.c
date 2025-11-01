@@ -9,6 +9,7 @@
 #include <ke/kpcr.h>
 #include <ke/types.h>
 #include <ke/defs.h>
+#include <ke/bugCheck.h>
 #include <hal/irql.h>
 #include <rtl/string.h>
 #include <md/tss.h>
@@ -16,6 +17,7 @@
 #include <md/msr.h>
 #include <md/idt.h>
 #include <md/gdt.h>
+#include <md/cpuid.h>
 #include <md/idt.h>
 #include <md/trap.h>
 #include <mm/phys.h>
