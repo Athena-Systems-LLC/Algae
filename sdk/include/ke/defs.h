@@ -15,6 +15,7 @@
 #define ALWAYS_INLINE   __attribute__((__always_inline__))
 #define NORETURN        __attribute__((__noreturn__))
 #define WEAK            __attribute__((__weak__))
+#define USED            __attribute__((__used__))
 #define SECTION(X)      __attribute__((__section__((X)), __used__))
 
 /* Min/max macros */
