@@ -15,11 +15,15 @@ CC := clang
 LD := ld
 
 .PHONY: all
-all: rts ntos iso
+all: sdk rts ntos iso
 
 .PHONY: rts
 rts:
 	cd rts/; make
+
+.PHONY: sdk
+sdk:
+	cd sdk/; make ARCH=$(ARCH)
 
 .PHONY: iso
 iso:

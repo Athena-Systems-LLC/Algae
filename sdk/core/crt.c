@@ -1,15 +1,14 @@
 /*
- * ALGAE Client Server Runtime Service server
+ * ALGAE C runtime initialization
  * Copyright (c) 2025, Ian Moffett and the Algae team.
  * All rights reserved.
  * Provided under the BSD 3-Clause license.
  */
 
-#include <ntstatus.h>
-#include <types.h>
+extern int main(void);
 
 int
-main(void)
+__mainCrtStartup(void)
 {
-    return STATUS_SUCCESS;
+    return main();
 }

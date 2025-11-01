@@ -4,6 +4,7 @@
 *.iso
 *.bin
 *.exe
+*.lib
 /cc
 /ntos/shim/
 /ntos/ke/ksyms.c
