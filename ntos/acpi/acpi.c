@@ -94,10 +94,10 @@ void
 acpiInit(void)
 {
     struct bootParams bootParams;
-    int error;
+    NTSTATUS status;
 
-    error = keGetBootParams(&bootParams, 0);
-    if (error < 0) {
+    status = keGetBootParams(&bootParams, 0);
+    if (status != STATUS_SUCCESS) {
         keBugCheck("acpi: failed to get boot params\n");
     }
 

@@ -30,10 +30,10 @@ bootVidGetBase(void)
 {
     struct bootParams params;
     struct fbParams *fbParams;
-    int error;
+    NTSTATUS status;
 
-    error = keGetBootParams(&params, 0);
-    if (error < 0) {
+    status = keGetBootParams(&params, 0);
+    if (status != STATUS_SUCCESS) {
         return 0;
     }
 
@@ -97,18 +97,18 @@ bootVidDrawCh(BOOTVID_CHAR *chp)
     struct bootParams params;
     struct fbParams *fbParams;
     const UCHAR *glyph;
+    NTSTATUS status;
     PSF_FONT *font = (PSF_FONT *)g_consFont;
     ULONG x, y, color;
     ULONG idx, *fbio;
-    int error;
 
     if (chp == NULL) {
         return -1;
     }
 
-    error = keGetBootParams(&params, 0);
-    if (error < 0) {
-        return error;
+    status = keGetBootParams(&params, 0);
+    if (status != STATUS_SUCCESS) {
+        return status;
     }
 
     fbParams = &params.fbParams;

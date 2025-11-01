@@ -9,6 +9,7 @@
 #define _KE_BOOTPARAM_H_ 1
 
 #include <ke/types.h>
+#include <ntstatus.h>
 
 /*
  * Framebuffer parameters
@@ -37,10 +38,8 @@ struct bootParams {
  *
  * @res: New bootparams is written here
  * @flags: Optional flags
- *
- * Returns zero on success
  */
-int keGetBootParams(struct bootParams *res, int flags);
+NTSTATUS keGetBootParams(struct bootParams *res, int flags);
 
 /*
  * Get the base address of the data of some

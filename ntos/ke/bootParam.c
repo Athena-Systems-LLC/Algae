@@ -85,7 +85,7 @@ keGetKernelBase(void)
     return hhmOffset;
 }
 
-int
+NTSTATUS
 keGetBootParams(struct bootParams *res, int flags)
 {
     struct limine_rsdp_response *rsdpResp;
@@ -99,6 +99,7 @@ keGetBootParams(struct bootParams *res, int flags)
     if ((rsdpResp = rsdpReq.response) == NULL) {
         keBugCheck("bootvars: could not get ACPI RSDP\n");
     }
+
     res->acpiRsdp = rsdpResp->address;
-    return 0;
+    return STATUS_SUCCESS;
 }
