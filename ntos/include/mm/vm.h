@@ -17,6 +17,14 @@
 #define PHYS_TO_VIRT(PA) (void *)((PA) + keGetKernelBase())
 #define VIRT_TO_PHYS(VIRT) (((ULONG_PTR)(VIRT)) - keGetKernelBase())
 
+/* Page protection flags */
+#define PAGE_READONLY       0x00
+#define PAGE_READWRITE      0x01
+#define PAGE_EXECUTE_READ   0x02
+#define PAGE_USER_READONLY  0x03
+#define PAGE_USER_READWRITE 0x04
+#define PAGE_USER_EXEC_READ 0x05
+
 /*
  * Represents a contigious virtual memory region
  *
