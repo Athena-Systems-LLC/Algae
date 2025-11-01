@@ -23,6 +23,7 @@
 typedef enum {
     NT_OB_DIRECTORY,
     NT_OB_TIMER,
+    NT_OB_MAPPER,
     __NT_OB_MAX,
 } NT_OBJECT_TYPE;
 
