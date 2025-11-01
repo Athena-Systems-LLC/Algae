@@ -11,6 +11,7 @@
 #include <ke/sched.h>
 #include <ke/bugCheck.h>
 #include <ke/bootPack.h>
+#include <ke/module.h>
 #include <ke/loader.h>
 #include <hal/mmu.h>
 #include <hal/process.h>
@@ -39,6 +40,10 @@ kMain(void)
     kiSchedInit();
     kiMpInit();
     kiBootPackInit();
+
+    /* Initialize modules */
+    kiModuleInit(MODULE_OBJECT);
+    kiModuleInit(MODULE_GENERIC);
 
     status = exCreateProcess(PROCESS_UNAMED, &proc, 0);
     if (status != STATUS_SUCCESS) {
